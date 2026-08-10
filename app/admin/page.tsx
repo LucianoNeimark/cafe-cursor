@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 /**
@@ -143,9 +144,9 @@ export default function AdminLogin() {
         </form>
 
         <p className="mt-8 text-center text-xs text-gray-500">
-          <a href="/" className="hover:text-white">
+          <Link href="/" className="hover:text-white">
             ← Volver al inicio
-          </a>
+          </Link>
         </p>
       </div>
     </div>
