@@ -19,9 +19,9 @@ export const translations = {
     // Footer
     footerNote: "Solo quienes estén registrados en el evento pueden obtener créditos.",
     onePerPerson: "Un crédito por persona.",
-    madeBy: "Organizado por",
-    ambassadors: "Cafe Cursor Buenos Aires #4",
-    ambassadorTitle: "Buenos Aires, Argentina",
+    madeBy: "Creado por",
+    ambassadors: "Chris & Alex",
+    ambassadorTitle: "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina",
     poweredBy: "Con tecnología de",
     
     // Badge
@@ -82,9 +82,9 @@ export const translations = {
     // Footer
     footerNote: "Only registered event attendees can get credits.",
     onePerPerson: "One credit per person.",
-    madeBy: "Organized by",
-    ambassadors: "Cafe Cursor Buenos Aires #4",
-    ambassadorTitle: "Buenos Aires, Argentina",
+    madeBy: "Made by",
+    ambassadors: "Chris & Alex",
+    ambassadorTitle: "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina",
     poweredBy: "Powered by",
     
     // Badge

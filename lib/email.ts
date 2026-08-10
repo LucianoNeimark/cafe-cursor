@@ -140,8 +140,8 @@ function generateEmailHTML({
       ? "¿Tienes dudas? Comunícate con la organización del evento."
       : "Questions? Contact the event organizers.",
     footer: isSpanish
-      ? "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina"
-      : "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina",
+      ? "Creado con ☕ por Chris & Alex para Cafe Cursor Buenos Aires #4"
+      : "Made with ☕ by Chris & Alex for Cafe Cursor Buenos Aires #4",
     companyLabel: isSpanish ? "Empresa" : "Company",
   };
 

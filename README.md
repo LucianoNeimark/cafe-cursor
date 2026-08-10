@@ -248,7 +248,7 @@ MIT License - feel free to use this for your community events!
 
 ## 💚 Credits
 
-Configured for **Cafe Cursor Buenos Aires #4** — Buenos Aires, Argentina
+Made with ☕ by **Chris & Alex** for **Cafe Cursor Buenos Aires #4** — Buenos Aires, Argentina
 
 ---
 
