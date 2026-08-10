@@ -24,7 +24,6 @@ interface SendCreditEmailParams {
   name: string;
   creditLink: string;
   creditCode: string;
-  company?: string;
   isTest?: boolean;
   locale?: "es" | "en";
 }
@@ -37,7 +36,6 @@ export async function sendCreditEmail({
   name,
   creditLink,
   creditCode,
-  company,
   isTest = false,
   locale = "es",
 }: SendCreditEmailParams): Promise<{ success: boolean; error?: string }> {
@@ -56,7 +54,6 @@ export async function sendCreditEmail({
     console.log(`   👤 Nombre: ${name}`);
     console.log(`   🎫 Crédito: ${creditCode}`);
     console.log(`   🔗 Enlace: ${creditLink}`);
-    console.log(`   🏢 Empresa: ${company || "N/A"}`);
     console.log(`   🧪 Prueba: ${isTest}`);
     console.log(`   🌐 Idioma: ${locale}`);
     console.log(`   ✅ Correo simulado con éxito`);
@@ -72,7 +69,6 @@ export async function sendCreditEmail({
       name,
       creditLink,
       creditCode,
-      company,
       isTest,
       locale,
     });
@@ -105,8 +101,6 @@ export async function sendCreditEmail({
 function generateEmailHTML({
   name,
   creditLink,
-  creditCode,
-  company,
   isTest,
   locale,
 }: Omit<SendCreditEmailParams, "to">): string {
@@ -121,8 +115,10 @@ function generateEmailHTML({
       ? "Nos alegra mucho tenerte en nuestra comunidad. Este es tu crédito exclusivo de Cursor:"
       : "We're thrilled to have you in our community. Here's your exclusive Cursor credit:",
     yourCredit: isSpanish ? "Tu crédito de Cursor" : "Your Cursor Credit",
-    code: isSpanish ? "Código" : "Code",
     useCredit: isSpanish ? "Usar mi crédito" : "Use My Credit",
+    copyFallback: isSpanish
+      ? "Si el botón no funciona, copia y pega este enlace:"
+      : "If the button doesn't work, copy and paste this link:",
     testWarning: isSpanish
       ? "⚠️ Este es un crédito de PRUEBA (no es válido para uso real)"
       : "⚠️ This is a TEST credit (not valid for real use)",
@@ -142,7 +138,6 @@ function generateEmailHTML({
     footer: isSpanish
       ? "Creado por Chris & Alex y adaptado para Buenos Aires por Luciano"
       : "Made by Chris & Alex and adapted for Buenos Aires by Luciano",
-    companyLabel: isSpanish ? "Empresa" : "Company",
   };
 
   return `
@@ -206,52 +201,6 @@ function generateEmailHTML({
                       ${texts.intro}
                     </p>
 
-                    <!-- Info del usuario -->
-                    ${company ? `
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a; border-radius: 12px; margin-bottom: 24px;">
-                      <tr>
-                        <td style="padding: 16px;">
-                          <p style="margin: 0 0 4px 0; font-size: 12px; color: #737373; text-transform: uppercase; letter-spacing: 0.5px;">
-                            ${texts.companyLabel}
-                          </p>
-                          <p style="margin: 0; font-size: 14px; color: #ffffff;">
-                            ${company}
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                    ` : ""}
-
-                    <!-- Warning de test -->
-                    ${isTest ? `
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #78350f; border: 1px solid #92400e; border-radius: 12px; margin-bottom: 24px;">
-                      <tr>
-                        <td style="padding: 12px 16px;">
-                          <p style="margin: 0; font-size: 12px; color: #fbbf24; text-align: center;">
-                            ${texts.testWarning}
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                    ` : ""}
-
-                    <!-- Box del crédito -->
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a; border: 1px solid #262626; border-radius: 12px; margin-bottom: 24px;">
-                      <tr>
-                        <td style="padding: 20px;">
-                          <p style="margin: 0 0 8px 0; font-size: 10px; color: #737373; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">
-                            ${texts.yourCredit}
-                          </p>
-                          <p style="margin: 0 0 4px 0; font-size: 12px; color: #a3a3a3;">
-                            ${texts.code}: <span style="font-family: monospace; color: #ffffff;">${creditCode}</span>
-                          </p>
-                          <p style="margin: 0; font-size: 11px; color: #737373; word-break: break-all; font-family: monospace;">
-                            ${creditLink}
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-
                     <!-- Botón CTA -->
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                       <tr>
@@ -263,6 +212,21 @@ function generateEmailHTML({
                       </tr>
                     </table>
 
+                    <!-- Enlace alternativo para copiar y pegar -->
+                    <p style="margin: 16px 0 0 0; font-size: 11px; line-height: 1.5; color: #737373; text-align: center;">
+                      ${texts.copyFallback}
+                    </p>
+                    <p style="margin: 6px 0 0 0; font-size: 11px; line-height: 1.5; text-align: center; word-break: break-all; font-family: monospace;">
+                      <a href="${creditLink}" target="_blank" style="color: #a3a3a3; text-decoration: underline;">${creditLink}</a>
+                    </p>
+
+                    <!-- Warning de test -->
+                    ${isTest ? `
+                    <p style="margin: 20px 0 0 0; font-size: 11px; line-height: 1.5; color: #fbbf24; text-align: center;">
+                      ${texts.testWarning}
+                    </p>
+                    ` : ""}
+
                   </td>
                 </tr>
               </table>
@@ -271,7 +235,7 @@ function generateEmailHTML({
 
           <!-- Instrucciones -->
           <tr>
-            <td style="padding: 32px 0;">
+            <td style="padding: 24px 0;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #171717; border: 1px solid #262626; border-radius: 12px;">
                 <tr>
                   <td style="padding: 24px;">

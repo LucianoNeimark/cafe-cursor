@@ -10,7 +10,6 @@ interface DeliverCreditParams {
   userId: string;
   recipientEmail: string;
   recipientName: string;
-  company?: string;
   credit: {
     code: string;
     link: string;
@@ -25,7 +24,6 @@ async function deliverCredit({
   userId,
   recipientEmail,
   recipientName,
-  company,
   credit,
   locale,
   isExisting,
@@ -36,7 +34,6 @@ async function deliverCredit({
     name: recipientName,
     creditLink: credit.link,
     creditCode: credit.code,
-    company,
     isTest: credit.isTest,
     locale,
   });
@@ -154,7 +151,6 @@ export async function POST(request: NextRequest) {
         userId: eligibleUser.id,
         recipientEmail: eligibleUser.email,
         recipientName: eligibleUser.name,
-        company: eligibleUser.company || undefined,
         credit: eligibleUser.credit,
         locale,
         isExisting: true,
@@ -218,7 +214,6 @@ export async function POST(request: NextRequest) {
       userId: result.id,
       recipientEmail: result.email,
       recipientName: result.name,
-      company: result.company || undefined,
       credit: availableCredit,
       locale,
       isExisting: false,

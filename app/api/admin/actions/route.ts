@@ -285,7 +285,6 @@ export async function POST(request: NextRequest) {
           name: user.name,
           creditLink: user.credit.link,
           creditCode: user.credit.code,
-          company: user.company || undefined,
           isTest: user.credit.isTest,
           locale: locale === "en" ? "en" : "es",
         });
