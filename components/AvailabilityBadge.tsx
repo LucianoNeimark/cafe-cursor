@@ -10,8 +10,8 @@ interface AvailabilityData {
 }
 
 /**
- * Badge que mostra a quantidade de créditos disponíveis
- * Atualiza automaticamente a cada 30 segundos
+ * Indicador de la cantidad de créditos disponibles.
+ * Se actualiza automáticamente cada 30 segundos.
  */
 export function AvailabilityBadge() {
   const { t } = useLanguage();
@@ -23,18 +23,18 @@ export function AvailabilityBadge() {
       const response = await fetch("/api/register", { method: "GET" });
       const json = await response.json();
 
-      // Mapear resposta da API para o formato do componente
+      // Adaptar la respuesta de la API al formato del componente.
       if (json.remaining !== undefined) {
         const mappedData: AvailabilityData = {
           remaining: json.remaining,
           totalEligible: json.stats?.totalEligible || 0,
           totalClaimed: json.stats?.claimed || 0,
         };
-        console.log(`📊 [BADGE] Disponibilidade atualizada:`, mappedData);
+        console.log(`📊 [BADGE] Disponibilidad actualizada:`, mappedData);
         setData(mappedData);
       }
     } catch (error) {
-      console.error(`❌ [BADGE] Erro ao buscar disponibilidade:`, error);
+      console.error(`❌ [BADGE] Error al consultar la disponibilidad:`, error);
     } finally {
       setIsLoading(false);
     }
@@ -43,7 +43,7 @@ export function AvailabilityBadge() {
   useEffect(() => {
     fetchAvailability();
 
-    // Atualizar a cada 30 segundos
+    // Actualizar cada 30 segundos.
     const interval = setInterval(fetchAvailability, 30000);
     return () => clearInterval(interval);
   }, []);

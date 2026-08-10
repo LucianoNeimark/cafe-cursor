@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 interface Credit {
@@ -56,12 +56,7 @@ export default function AdminDashboard() {
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [showAddCreditModal, setShowAddCreditModal] = useState(false);
 
-  // Verificar autenticación y cargar datos
-  useEffect(() => {
-    fetchDashboard();
-  }, []);
-
-  const fetchDashboard = async () => {
+  const fetchDashboard = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/dashboard");
       if (res.status === 401) {
@@ -79,7 +74,12 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  // Verificar autenticación y cargar datos
+  useEffect(() => {
+    fetchDashboard();
+  }, [fetchDashboard]);
 
   const handleLogout = async () => {
     await fetch("/api/admin/auth", { method: "DELETE" });
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
   };
 
   const handleSendEmail = async (userId: string, email: string) => {
-    const locale = confirm(`¿Enviar email en portugués?\n\nOK = Português (pt-BR)\nCancelar = English (en)`) ? "pt-BR" : "en";
+    const locale = confirm(`¿Enviar el correo en español?\n\nAceptar = Español (es)\nCancelar = Inglés (en)`) ? "es" : "en";
     await executeAction("SEND_CREDIT_EMAIL", { userId, locale });
   };
 
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-        <div className="text-white">Cargando dashboard...</div>
+        <div className="text-white">Cargando panel…</div>
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function AdminDashboard() {
       {/* Grid de fondo */}
       <div className="pointer-events-none fixed inset-0 bg-grid-pattern opacity-20" />
 
-      {/* Header */}
+      {/* Encabezado */}
       <header className="relative border-b border-gray-800 bg-[#0a0a0a]/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
@@ -172,24 +172,24 @@ export default function AdminDashboard() {
               <path d="M457.43,125.94L244.42,2.96c-6.84-3.95-15.28-3.95-22.12,0L9.3,125.94c-5.75,3.32-9.3,9.46-9.3,16.11v247.99c0,6.65,3.55,12.79,9.3,16.11l213.01,122.98c6.84,3.95,15.28,3.95,22.12,0l213.01-122.98c5.75-3.32,9.3-9.46,9.3-16.11v-247.99c0-6.65-3.55-12.79-9.3-16.11ZM444.05,151.99l-205.63,356.16c-1.39,2.4-5.06,1.42-5.06-1.36v-233.21c0-4.66-2.49-8.97-6.53-11.31L24.87,145.67c-2.4-1.39-1.42-5.06,1.36-5.06h411.26c5.84,0,9.49,6.33,6.57,11.39Z" />
             </svg>
             <div>
-              <h1 className="text-lg font-bold">Cafe Cursor Admin</h1>
-              <p className="text-xs text-gray-400">Panel de Administración</p>
+              <h1 className="text-lg font-bold">Administración de Cafe Cursor</h1>
+              <p className="text-xs text-gray-400">Panel de control</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
             className="rounded-lg border border-gray-700 px-4 py-2 text-sm hover:bg-gray-800"
           >
-            Cerrar Sesión
+            Cerrar sesión
           </button>
         </div>
       </header>
 
-      {/* Stats */}
+        {/* Estadísticas */}
       <div className="relative mx-auto max-w-7xl px-4 py-6">
         <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
           <StatCard
-            label="Créditos Totales"
+            label="Créditos totales"
             value={data?.stats.totalCredits || 0}
             color="blue"
           />
@@ -204,17 +204,17 @@ export default function AdminDashboard() {
             color="orange"
           />
           <StatCard
-            label="De Test"
+            label="De prueba"
             value={data?.stats.testCredits || 0}
             color="purple"
           />
           <StatCard
-            label="Usuarios Elegibles"
+            label="Usuarios elegibles"
             value={data?.stats.totalEligible || 0}
             color="cyan"
           />
           <StatCard
-            label="Han Reclamado"
+            label="Créditos reclamados"
             value={data?.stats.claimedUsers || 0}
             color="pink"
           />
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
             <table className="w-full text-left text-sm">
               <thead className="border-b border-gray-800 bg-gray-900/50">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Email</th>
+                  <th className="px-4 py-3 font-medium">Correo</th>
                   <th className="px-4 py-3 font-medium">Nombre</th>
                   <th className="px-4 py-3 font-medium">Empresa</th>
                   <th className="px-4 py-3 font-medium">Estado</th>
@@ -326,7 +326,7 @@ export default function AdminDashboard() {
                               disabled={actionLoading}
                               className="rounded bg-purple-600 px-2 py-1 text-xs hover:bg-purple-700 disabled:opacity-50"
                             >
-                              Test
+                              Prueba
                             </button>
                           </>
                         )}
@@ -336,9 +336,9 @@ export default function AdminDashboard() {
                               onClick={() => handleSendEmail(user.id, user.email)}
                               disabled={actionLoading}
                               className="rounded bg-cyan-600 px-2 py-1 text-xs hover:bg-cyan-700 disabled:opacity-50"
-                              title="Enviar email con el link del crédito"
+                              title="Enviar por correo el enlace del crédito"
                             >
-                              📧 Email
+                              📧 Correo
                             </button>
                             <button
                               onClick={() => handleRevokeCredit(user.id, user.email)}
@@ -365,7 +365,7 @@ export default function AdminDashboard() {
               <thead className="border-b border-gray-800 bg-gray-900/50">
                 <tr>
                   <th className="px-4 py-3 font-medium">Código</th>
-                  <th className="px-4 py-3 font-medium">Link</th>
+                  <th className="px-4 py-3 font-medium">Enlace</th>
                   <th className="px-4 py-3 font-medium">Tipo</th>
                   <th className="px-4 py-3 font-medium">Estado</th>
                   <th className="px-4 py-3 font-medium">Asignado</th>
@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                     <td className="px-4 py-3">
                       {credit.isTest ? (
                         <span className="rounded-full bg-purple-500/20 px-2 py-1 text-xs text-purple-400">
-                          TEST
+                          PRUEBA
                         </span>
                       ) : (
                         <span className="rounded-full bg-blue-500/20 px-2 py-1 text-xs text-blue-400">
@@ -466,9 +466,17 @@ function StatusBadge({ status }: { status: string }) {
     invited: "bg-blue-500/20 text-blue-400",
   };
 
+  const labels: Record<string, string> = {
+    approved: "Aprobado",
+    pending_approval: "Pendiente de aprobación",
+    declined: "Rechazado",
+    waitlist: "Lista de espera",
+    invited: "Invitado",
+  };
+
   return (
     <span className={`rounded-full px-2 py-1 text-xs ${styles[status] || "bg-gray-500/20 text-gray-400"}`}>
-      {status}
+      {labels[status] || status}
     </span>
   );
 }
@@ -491,7 +499,7 @@ function AddUserModal({
         <div className="space-y-4">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white placeholder:text-gray-500 focus:border-white focus:outline-none"
@@ -555,7 +563,7 @@ function AddCreditModal({
           />
           <input
             type="url"
-            placeholder="Link completo (https://cursor.com/...)"
+            placeholder="Enlace completo (https://cursor.com/...)"
             value={link}
             onChange={(e) => setLink(e.target.value)}
             className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white placeholder:text-gray-500 focus:border-white focus:outline-none"
@@ -567,7 +575,7 @@ function AddCreditModal({
               onChange={(e) => setIsTest(e.target.checked)}
               className="h-4 w-4 rounded border-gray-700 bg-gray-900"
             />
-            <span className="text-sm text-gray-300">Es crédito de prueba (TEST)</span>
+            <span className="text-sm text-gray-300">Es un crédito de prueba</span>
           </label>
         </div>
         <div className="mt-6 flex gap-3">

@@ -6,18 +6,18 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/components/LanguageContext";
 
 /**
- * Landing page do Cafe Cursor
- * Estilo minimalista inspirado no Luma
+ * Página de inicio de Cafe Cursor.
+ * Estilo minimalista inspirado en Luma.
  */
 export default function Home() {
   const { t } = useLanguage();
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center px-4 py-16">
-      {/* Fundo com grid */}
+      {/* Fondo con cuadrícula */}
       <div className="pointer-events-none fixed inset-0 bg-grid-pattern opacity-40" />
 
-      {/* Seletor de idioma - fixo no topo direito */}
+      {/* Selector de idioma fijo en la esquina superior derecha */}
       <div className="fixed right-4 top-4 z-50">
         <LanguageSelector />
       </div>
@@ -40,7 +40,7 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* Badge de disponibilidade */}
+        {/* Indicador de disponibilidad */}
         <div className="mb-6">
           <AvailabilityBadge />
         </div>
@@ -58,7 +58,7 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Formulário de cadastro - centralizado */}
+      {/* Formulario de registro centrado */}
       <section className="w-full flex justify-center animate-slide-up" style={{ animationDelay: "0.1s" }}>
         <RegisterForm />
       </section>

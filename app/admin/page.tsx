@@ -24,7 +24,7 @@ export default function AdminLogin() {
           router.push("/admin/dashboard");
         }
       } catch (err) {
-        console.error("Error checking auth:", err);
+        console.error("Error al verificar la autenticación:", err);
       } finally {
         setCheckingAuth(false);
       }
@@ -88,10 +88,10 @@ export default function AdminLogin() {
         </div>
 
         <h1 className="mb-2 text-center text-2xl font-bold text-white">
-          Admin Panel
+          Panel de administración
         </h1>
         <p className="mb-8 text-center text-sm text-gray-400">
-          Cafe Cursor - Panel de Administración
+          Cafe Cursor
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,7 +138,7 @@ export default function AdminLogin() {
             disabled={loading}
             className="w-full rounded-lg bg-white px-4 py-3 font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Verificando..." : "Iniciar Sesión"}
+            {loading ? "Verificando…" : "Iniciar sesión"}
           </button>
         </form>
 

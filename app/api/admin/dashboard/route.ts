@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 /**
- * GET /api/admin/dashboard - Obtener datos del dashboard
+ * GET /api/admin/dashboard - Obtener datos del panel
  */
 export async function GET(request: NextRequest) {
   try {
@@ -72,7 +74,7 @@ export async function GET(request: NextRequest) {
       eligibleUsers,
     });
   } catch (error) {
-    console.error("❌ [ADMIN] Error obteniendo dashboard:", error);
+    console.error("❌ [ADMIN] Error al obtener el panel:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 }

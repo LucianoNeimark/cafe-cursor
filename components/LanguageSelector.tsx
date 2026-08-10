@@ -5,14 +5,14 @@ import { Locale } from "@/lib/translations";
 
 /**
  * Selector de idioma con banderas
- * Brasil 🇧🇷 | USA/UK 🇺🇸
+ * Español 🇪🇸 | English 🇺🇸
  */
 export function LanguageSelector() {
   const { locale, setLocale } = useLanguage();
 
-  const languages: { code: Locale; flag: string; label: string }[] = [
-    { code: "pt-BR", flag: "🇧🇷", label: "PT" },
-    { code: "en", flag: "🇺🇸", label: "EN" },
+  const languages: { code: Locale; flag: string; label: string; name: string }[] = [
+    { code: "es", flag: "🇪🇸", label: "ES", name: "Español" },
+    { code: "en", flag: "🇺🇸", label: "EN", name: "English" },
   ];
 
   return (
@@ -20,13 +20,15 @@ export function LanguageSelector() {
       {languages.map((lang) => (
         <button
           key={lang.code}
+          type="button"
           onClick={() => setLocale(lang.code)}
           className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
             locale === lang.code
               ? "bg-foreground text-background"
               : "text-muted hover:text-foreground"
           }`}
-          aria-label={`Mudar para ${lang.label}`}
+          aria-label={locale === "es" ? `Cambiar idioma a ${lang.name}` : `Switch language to ${lang.name}`}
+          aria-pressed={locale === lang.code}
         >
           <span className="text-base">{lang.flag}</span>
           <span className="hidden sm:inline">{lang.label}</span>

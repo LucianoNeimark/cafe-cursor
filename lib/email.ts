@@ -42,7 +42,7 @@ interface SendCreditEmailParams {
   creditCode: string;
   company?: string;
   isTest?: boolean;
-  locale?: "pt-BR" | "en";
+  locale?: "es" | "en";
 }
 
 /**
@@ -55,7 +55,7 @@ export async function sendCreditEmail({
   creditCode,
   company,
   isTest = false,
-  locale = "pt-BR",
+  locale = "es",
 }: SendCreditEmailParams): Promise<{ success: boolean; error?: string }> {
   // Obtener cliente Resend (lazy)
   const resendClient = getResendClient();
@@ -66,17 +66,17 @@ export async function sendCreditEmail({
     console.log(`   📬 Para: ${to}`);
     console.log(`   👤 Nombre: ${name}`);
     console.log(`   🎫 Crédito: ${creditCode}`);
-    console.log(`   🔗 Link: ${creditLink}`);
+    console.log(`   🔗 Enlace: ${creditLink}`);
     console.log(`   🏢 Empresa: ${company || "N/A"}`);
-    console.log(`   🧪 Test: ${isTest}`);
-    console.log(`   🌐 Locale: ${locale}`);
-    console.log(`   ✅ Email simulado con éxito`);
+    console.log(`   🧪 Prueba: ${isTest}`);
+    console.log(`   🌐 Idioma: ${locale}`);
+    console.log(`   ✅ Correo simulado con éxito`);
     return { success: true };
   }
 
   try {
-    const subject = locale === "pt-BR" 
-      ? "🎉 Seu crédito Cursor está aqui! - Cafe Cursor Floripa"
+    const subject = locale === "es"
+      ? "🎉 ¡Tu crédito de Cursor ya está aquí! - Cafe Cursor Floripa"
       : "🎉 Your Cursor credit is here! - Cafe Cursor Floripa";
 
     const html = generateEmailHTML({
@@ -121,39 +121,39 @@ function generateEmailHTML({
   isTest,
   locale,
 }: Omit<SendCreditEmailParams, "to">): string {
-  const isPtBR = locale === "pt-BR";
+  const isSpanish = locale === "es";
 
   const texts = {
-    greeting: isPtBR ? `Olá, ${name}!` : `Hello, ${name}!`,
-    thanks: isPtBR 
-      ? "Obrigado por participar do Cafe Cursor Floripa!" 
+    greeting: isSpanish ? `¡Hola, ${name}!` : `Hello, ${name}!`,
+    thanks: isSpanish
+      ? "¡Gracias por participar en Cafe Cursor Floripa!"
       : "Thank you for joining Cafe Cursor Floripa!",
-    intro: isPtBR
-      ? "Estamos muito felizes em ter você na nossa comunidade. Aqui está seu crédito exclusivo do Cursor IDE:"
+    intro: isSpanish
+      ? "Nos alegra mucho tenerte en nuestra comunidad. Este es tu crédito exclusivo de Cursor IDE:"
       : "We're thrilled to have you in our community. Here's your exclusive Cursor IDE credit:",
-    yourCredit: isPtBR ? "Seu Crédito Cursor" : "Your Cursor Credit",
-    code: isPtBR ? "Código" : "Code",
-    useCredit: isPtBR ? "Usar Meu Crédito" : "Use My Credit",
-    testWarning: isPtBR 
-      ? "⚠️ Este é um crédito de TESTE (não válido para uso real)"
+    yourCredit: isSpanish ? "Tu crédito de Cursor" : "Your Cursor Credit",
+    code: isSpanish ? "Código" : "Code",
+    useCredit: isSpanish ? "Usar mi crédito" : "Use My Credit",
+    testWarning: isSpanish
+      ? "⚠️ Este es un crédito de PRUEBA (no es válido para uso real)"
       : "⚠️ This is a TEST credit (not valid for real use)",
-    howToUse: isPtBR ? "Como usar:" : "How to use:",
-    step1: isPtBR 
-      ? "Clique no botão acima ou copie o link"
+    howToUse: isSpanish ? "Cómo usarlo:" : "How to use:",
+    step1: isSpanish
+      ? "Haz clic en el botón de arriba o copia el enlace"
       : "Click the button above or copy the link",
-    step2: isPtBR 
-      ? "Faça login ou crie sua conta no Cursor"
+    step2: isSpanish
+      ? "Inicia sesión o crea tu cuenta de Cursor"
       : "Sign in or create your Cursor account",
-    step3: isPtBR 
-      ? "O crédito será aplicado automaticamente!"
+    step3: isSpanish
+      ? "¡El crédito se aplicará automáticamente!"
       : "The credit will be applied automatically!",
-    questions: isPtBR
-      ? "Dúvidas? Entre em contato com os organizadores do evento."
+    questions: isSpanish
+      ? "¿Tienes dudas? Comunícate con la organización del evento."
       : "Questions? Contact the event organizers.",
-    footer: isPtBR
-      ? "Feito com ☕ por Chris & Alex - Cursor Ambassador Brasil"
+    footer: isSpanish
+      ? "Creado con ☕ por Chris & Alex - Embajadores de Cursor en Brasil"
       : "Made with ☕ by Chris & Alex - Cursor Ambassador Brasil",
-    companyLabel: isPtBR ? "Empresa" : "Company",
+    companyLabel: isSpanish ? "Empresa" : "Company",
   };
 
   return `

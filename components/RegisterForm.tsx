@@ -21,8 +21,8 @@ interface RegisterResult {
 }
 
 /**
- * Formulário de cadastro para obter crédito do Cursor
- * Apenas usuários elegíveis (aprovados no evento) podem se cadastrar
+ * Formulario de registro para obtener un crédito de Cursor.
+ * Solo pueden registrarse usuarios elegibles y aprobados para el evento.
  */
 export function RegisterForm() {
   const { t, locale } = useLanguage();
@@ -36,7 +36,7 @@ export function RegisterForm() {
     setStatus("loading");
     setResult(null);
 
-    console.log(`📤 [FORM] Enviando cadastro: ${email}`);
+    console.log(`📤 [FORM] Enviando registro: ${email}`);
 
     try {
       const response = await fetch("/api/register", {
@@ -52,16 +52,16 @@ export function RegisterForm() {
       const data: RegisterResult = await response.json();
 
       if (data.success) {
-        console.log(`✅ [FORM] Cadastro bem-sucedido`);
+        console.log(`✅ [FORM] Registro completado`);
         setStatus("success");
         setResult(data);
       } else {
-        console.log(`⚠️ [FORM] Erro: ${data.error} (code: ${data.code})`);
+        console.log(`⚠️ [FORM] Error: ${data.error} (código: ${data.code})`);
         setStatus("error");
         setResult(data);
       }
     } catch (error) {
-      console.error(`❌ [FORM] Erro de rede:`, error);
+      console.error(`❌ [FORM] Error de red:`, error);
       setStatus("error");
       setResult({
         success: false,
@@ -74,7 +74,7 @@ export function RegisterForm() {
   const handleCopyLink = async () => {
     if (result?.credit) {
       await navigator.clipboard.writeText(result.credit);
-      console.log(`📋 [FORM] Link copiado para área de transferência`);
+      console.log(`📋 [FORM] Enlace copiado al portapapeles`);
     }
   };
 
@@ -85,7 +85,7 @@ export function RegisterForm() {
     setEmail("");
   };
 
-  // Mapear códigos de erro para traduções
+  // Mapear los códigos de error a sus traducciones.
   const getErrorMessage = (code?: string, originalError?: string): string => {
     switch (code) {
       case "NOT_ELIGIBLE":
@@ -101,12 +101,12 @@ export function RegisterForm() {
     }
   };
 
-  // Vista de sucesso
+  // Vista de éxito
   if (status === "success" && result?.credit) {
     return (
       <div className="w-full max-w-md animate-fade-in">
         <div className="rounded-2xl border border-border bg-background p-8">
-          {/* Ícone de sucesso */}
+          {/* Ícono de éxito */}
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--success)]/10">
             <svg
               className="h-8 w-8 text-[var(--success)]"
@@ -131,7 +131,7 @@ export function RegisterForm() {
             {t("congratsMessage")}
           </p>
 
-          {/* Info do usuário */}
+          {/* Información del usuario */}
           {result.user && (
             <div className="mb-4 rounded-xl border border-border bg-foreground/5 p-3">
               <p className="text-sm">
@@ -144,7 +144,7 @@ export function RegisterForm() {
             </div>
           )}
 
-          {/* Badge de teste */}
+          {/* Aviso de crédito de prueba */}
           {result.isTest && (
             <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
               <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
@@ -153,7 +153,7 @@ export function RegisterForm() {
             </div>
           )}
 
-          {/* Link do crédito */}
+          {/* Enlace del crédito */}
           <div className="mb-4 rounded-xl border border-border bg-background p-4">
             <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted">
               {t("yourCredit")}
@@ -161,7 +161,7 @@ export function RegisterForm() {
             <p className="break-all font-mono text-sm">{result.credit}</p>
           </div>
 
-          {/* Botões de ação */}
+          {/* Botones de acción */}
           <div className="flex gap-3">
             <button
               onClick={handleCopyLink}
@@ -205,11 +205,11 @@ export function RegisterForm() {
     );
   }
 
-  // Formulário de cadastro
+  // Formulario de registro
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md animate-fade-in">
       <div className="rounded-2xl border border-border bg-background p-8">
-        {/* Campo Nome */}
+        {/* Campo de nombre */}
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -230,7 +230,7 @@ export function RegisterForm() {
           />
         </div>
 
-        {/* Campo Email */}
+        {/* Campo de correo electrónico */}
         <div className="mb-6">
           <label
             htmlFor="email"
@@ -254,7 +254,7 @@ export function RegisterForm() {
           </p>
         </div>
 
-        {/* Mensagem de erro */}
+        {/* Mensaje de error */}
         {status === "error" && result && (
           <div className="mb-4 rounded-xl border border-[var(--error)]/20 bg-[var(--error)]/5 p-4">
             <p className="text-sm text-[var(--error)]">
@@ -280,7 +280,7 @@ export function RegisterForm() {
           </div>
         )}
 
-        {/* Botão de cadastro */}
+        {/* Botón de registro */}
         <button
           type="submit"
           disabled={status === "loading" || !name.trim() || !email.trim()}

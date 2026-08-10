@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
     const { name, email } = validatedData;
     const normalizedEmail = email.toLowerCase().trim();
     
-    // Obtener locale del request (default: pt-BR)
-    const locale = (body.locale === "en" ? "en" : "pt-BR") as "pt-BR" | "en";
+    // Obtener el idioma solicitado (español por defecto).
+    const locale = (body.locale === "en" ? "en" : "es") as "es" | "en";
 
     console.log(`📝 [REGISTER] Intento de registro: ${normalizedEmail}`);
 
@@ -31,11 +31,11 @@ export async function POST(request: NextRequest) {
 
     // Usuario NO está en la lista de elegibles
     if (!eligibleUser) {
-      console.log(`❌ [REGISTER] Email no elegible: ${normalizedEmail}`);
+      console.log(`❌ [REGISTER] Correo no elegible: ${normalizedEmail}`);
       return NextResponse.json(
         {
           success: false,
-          error: "Este email no está registrado en el evento Cafe Cursor. Solo los asistentes aprobados pueden obtener créditos.",
+          error: "Este correo no está registrado para el evento Cafe Cursor. Solo los participantes aprobados pueden obtener créditos.",
           code: "NOT_ELIGIBLE",
         },
         { status: 403 }
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Tu registro en el evento aún no ha sido aprobado. Por favor contacta al organizador.",
+          error: "Tu inscripción al evento aún no fue aprobada. Comunícate con la organización.",
           code: "NOT_APPROVED",
         },
         { status: 403 }
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: true,
-          message: "¡Ya reclamaste tu crédito! Aquí está nuevamente:",
+          message: "¡Ya reclamaste tu crédito! Aquí lo tienes nuevamente:",
           credit: eligibleUser.credit.link,
           isExisting: true,
           user: {
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     const availableCredit = await prisma.credit.findFirst({
       where: { 
         isUsed: false,
-        isTest: isTestUser,  // Test users get test credits, real users get real credits
+        isTest: isTestUser, // Los usuarios de prueba reciben créditos de prueba.
       },
       orderBy: { createdAt: "asc" },
     });
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Lo sentimos, no hay créditos disponibles en este momento. Por favor contacta al organizador.",
+          error: "Lo sentimos, no hay créditos disponibles en este momento. Comunícate con la organización.",
           code: "NO_CREDITS",
         },
         { status: 503 }
@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: "¡Felicidades! Aquí está tu crédito de Cursor:",
+        message: "¡Felicitaciones! Este es tu crédito de Cursor:",
         credit: availableCredit.link,
         isTest: isTestUser,
         user: {

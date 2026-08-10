@@ -8,7 +8,7 @@ import {
 } from "@/lib/auth";
 
 /**
- * POST /api/admin/auth - Login
+ * POST /api/admin/auth - Iniciar sesión
  */
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!verifyCredentials(username, password)) {
-      console.log(`❌ [ADMIN] Login fallido: ${username}`);
+      console.log(`❌ [ADMIN] Inicio de sesión fallido: ${username}`);
       return NextResponse.json(
         { success: false, error: "Credenciales inválidas" },
         { status: 401 }
@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
     const token = createSessionToken();
     await setSessionCookie(token);
 
-    console.log(`✅ [ADMIN] Login exitoso: ${username}`);
+    console.log(`✅ [ADMIN] Inicio de sesión exitoso: ${username}`);
 
     return NextResponse.json({
       success: true,
-      message: "Login exitoso",
+      message: "Inicio de sesión exitoso",
     });
   } catch (error) {
     console.error("❌ [ADMIN] Error en login:", error);
@@ -71,16 +71,16 @@ export async function GET() {
 }
 
 /**
- * DELETE /api/admin/auth - Logout
+ * DELETE /api/admin/auth - Cerrar sesión
  */
 export async function DELETE() {
   try {
     await clearSessionCookie();
-    console.log(`🚪 [ADMIN] Logout`);
+    console.log(`🚪 [ADMIN] Sesión cerrada`);
 
     return NextResponse.json({
       success: true,
-      message: "Logout exitoso",
+      message: "Sesión cerrada correctamente",
     });
   } catch (error) {
     console.error("❌ [ADMIN] Error en logout:", error);

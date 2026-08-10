@@ -286,22 +286,22 @@ export async function POST(request: NextRequest) {
           creditCode: user.credit.code,
           company: user.company || undefined,
           isTest: user.credit.isTest,
-          locale: locale || "pt-BR",
+          locale: locale === "en" ? "en" : "es",
         });
 
         if (!emailResult.success) {
-          console.error(`❌ [ADMIN] Error enviando email a ${user.email}:`, emailResult.error);
+          console.error(`❌ [ADMIN] Error al enviar el correo a ${user.email}:`, emailResult.error);
           return NextResponse.json(
-            { error: `Error enviando email: ${emailResult.error}` },
+            { error: `Error al enviar el correo: ${emailResult.error}` },
             { status: 500 }
           );
         }
 
-        console.log(`📧 [ADMIN] Email enviado manualmente a: ${user.email}`);
+        console.log(`📧 [ADMIN] Correo enviado manualmente a: ${user.email}`);
 
         return NextResponse.json({
           success: true,
-          message: `Email enviado a ${user.email}`,
+          message: `Correo enviado a ${user.email}`,
         });
       }
 

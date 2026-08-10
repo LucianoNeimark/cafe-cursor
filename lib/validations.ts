@@ -13,8 +13,8 @@ export const registerSchema = z.object({
     .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/, "El nombre solo puede contener letras"),
   email: z
     .string()
-    .email("Por favor ingresa un email válido")
-    .max(255, "El email no puede exceder 255 caracteres")
+    .email("Ingresa un correo electrónico válido")
+    .max(255, "El correo electrónico no puede exceder los 255 caracteres")
     .toLowerCase()
     .trim(),
 });

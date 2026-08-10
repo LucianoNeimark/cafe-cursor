@@ -1,62 +1,62 @@
-export type Locale = "pt-BR" | "en";
+export type Locale = "es" | "en";
 
 export const translations = {
-  "pt-BR": {
+  es: {
     // Header
     title: "Cafe Cursor",
-    subtitle: "Obtenha seu crédito gratuito do Cursor IDE.",
-    cta: "Cadastre-se em segundos.",
+    subtitle: "Obtén tu crédito gratuito de Cursor IDE.",
+    cta: "Regístrate en segundos.",
     
     // Form
-    nameLabel: "Nome",
-    namePlaceholder: "Seu nome completo",
-    emailLabel: "Email",
-    emailPlaceholder: "O email que você usou no cadastro",
-    emailHint: "Use o mesmo email com que você se cadastrou no Luma",
-    submitButton: "Obter meu crédito",
-    submitting: "Verificando...",
+    nameLabel: "Nombre",
+    namePlaceholder: "Tu nombre completo",
+    emailLabel: "Correo electrónico",
+    emailPlaceholder: "El correo que usaste al registrarte",
+    emailHint: "Usa el mismo correo con el que te registraste en Luma",
+    submitButton: "Obtener mi crédito",
+    submitting: "Verificando…",
     
     // Footer
-    footerNote: "Apenas participantes cadastrados no evento podem obter créditos.",
-    onePerPerson: "Um crédito por pessoa.",
-    madeBy: "Feito por",
+    footerNote: "Solo quienes estén registrados en el evento pueden obtener créditos.",
+    onePerPerson: "Un crédito por persona.",
+    madeBy: "Creado por",
     ambassadors: "Chris & Alex",
-    ambassadorTitle: "Cursor Ambassador Brasil",
-    poweredBy: "Powered by",
+    ambassadorTitle: "Embajadores de Cursor en Brasil",
+    poweredBy: "Con tecnología de",
     
     // Badge
-    creditsAvailable: "créditos disponíveis",
-    noCredits: "Sem créditos disponíveis",
-    loading: "Carregando...",
-    alreadyClaimed: "participantes já resgataram",
+    creditsAvailable: "créditos disponibles",
+    noCredits: "No hay créditos disponibles",
+    loading: "Cargando…",
+    alreadyClaimed: "participantes ya reclamaron su crédito",
     of: "de",
     
     // Success
-    successTitle: "Crédito atribuído!",
-    alreadyHaveCredit: "Você já tem seu crédito!",
-    congratsMessage: "Parabéns! Aqui está seu crédito do Cursor:",
-    registeredAs: "Cadastrado como:",
-    testWarning: "⚠️ Este é um crédito de TESTE (não válido para uso real)",
-    yourCredit: "Seu crédito do Cursor",
-    copyLink: "Copiar link",
+    successTitle: "¡Crédito asignado!",
+    alreadyHaveCredit: "¡Ya tienes tu crédito!",
+    congratsMessage: "¡Felicitaciones! Este es tu crédito de Cursor:",
+    registeredAs: "Registrado como:",
+    testWarning: "⚠️ Este es un crédito de PRUEBA (no es válido para uso real)",
+    yourCredit: "Tu crédito de Cursor",
+    copyLink: "Copiar enlace",
     useCredit: "Usar crédito →",
-    saveLink: "Guarde este link, é único e pessoal.",
+    saveLink: "Guarda este enlace: es único y personal.",
     
     // Errors
-    notEligible: "Este email não está cadastrado no evento Cafe Cursor. Apenas participantes aprovados podem obter créditos.",
-    notApproved: "Seu cadastro no evento ainda não foi aprovado. Por favor, entre em contato com o organizador.",
-    noCreditsAvailable: "Desculpe, não há créditos disponíveis no momento. Por favor, entre em contato com o organizador.",
-    networkError: "Erro de conexão. Por favor, tente novamente.",
-    thinkError: "Acha que é um erro? Entre em contato com o organizador do evento.",
-    pendingApproval: "Sua solicitação está pendente de aprovação.",
-    tryAnotherEmail: "Tentar com outro email",
+    notEligible: "Este correo no está registrado para el evento Cafe Cursor. Solo los participantes aprobados pueden obtener créditos.",
+    notApproved: "Tu inscripción al evento aún no fue aprobada. Comunícate con la organización.",
+    noCreditsAvailable: "Lo sentimos, no hay créditos disponibles en este momento. Comunícate con la organización.",
+    networkError: "Error de conexión. Inténtalo de nuevo.",
+    thinkError: "¿Crees que se trata de un error? Comunícate con la organización del evento.",
+    pendingApproval: "Tu solicitud está pendiente de aprobación.",
+    tryAnotherEmail: "Probar con otro correo",
     
     // Share
-    shareOnX: "Compartilhar no X",
-    shareMessage: "🚀 Acabei de ganhar um crédito do @cursor_ai no Cafe Cursor Floripa! Muito obrigado à comunidade por essa oportunidade incrível de experimentar o melhor editor de código com IA. #CafeCursorFloripa #CursorAI #DevCommunity",
+    shareOnX: "Compartir en X",
+    shareMessage: "🚀 ¡Acabo de recibir un crédito de @cursor_ai en Cafe Cursor Floripa! Muchas gracias a la comunidad por esta increíble oportunidad de probar el mejor editor de código con IA. #CafeCursorFloripa #CursorAI #DevCommunity",
     
     // Email
-    emailSent: "📧 Enviamos o crédito para seu email!",
+    emailSent: "📧 ¡También enviamos el crédito a tu correo!",
   },
   "en": {
     // Header
@@ -117,7 +117,7 @@ export const translations = {
   },
 } as const;
 
-export type TranslationKey = keyof typeof translations["pt-BR"];
+export type TranslationKey = keyof typeof translations.es;
 
 export function getTranslation(locale: Locale, key: TranslationKey): string {
   return translations[locale][key];
