@@ -21,7 +21,7 @@ export const translations = {
     onePerPerson: "Un crédito por persona.",
     madeBy: "Creado por",
     ambassadors: "Chris & Alex",
-    ambassadorTitle: "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina",
+    ambassadorTitle: "Adaptado para Buenos Aires por Luciano",
     poweredBy: "Con tecnología de",
     
     // Badge
@@ -84,7 +84,7 @@ export const translations = {
     onePerPerson: "One credit per person.",
     madeBy: "Made by",
     ambassadors: "Chris & Alex",
-    ambassadorTitle: "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina",
+    ambassadorTitle: "Adapted for Buenos Aires by Luciano",
     poweredBy: "Powered by",
     
     // Badge

@@ -140,8 +140,8 @@ function generateEmailHTML({
       ? "¿Tienes dudas? Comunícate con la organización del evento."
       : "Questions? Contact the event organizers.",
     footer: isSpanish
-      ? "Creado con ☕ por Chris & Alex para Cafe Cursor Buenos Aires #4"
-      : "Made with ☕ by Chris & Alex for Cafe Cursor Buenos Aires #4",
+      ? "Creado por Chris & Alex y adaptado para Buenos Aires por Luciano"
+      : "Made by Chris & Alex and adapted for Buenos Aires by Luciano",
     companyLabel: isSpanish ? "Empresa" : "Company",
   };
 
