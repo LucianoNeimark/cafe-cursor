@@ -11,7 +11,7 @@
 
 - **🔐 Secure Registration** - Only pre-approved attendees can claim credits
 - **📧 Email Notifications** - Automatic email with credit details via Resend
-- **🌍 Multi-language** - English and Brazilian Portuguese support
+- **🌍 Multi-language** - Spanish and English support
 - **📱 Responsive Design** - Beautiful dark theme, works on all devices
 - **👤 Admin Panel** - Manage credits and users with ease
 - **🐦 Social Sharing** - One-click share to X (Twitter)
@@ -248,8 +248,7 @@ MIT License - feel free to use this for your community events!
 
 ## 💚 Credits
 
-Made with ☕ by **Chris & Alex**  
-Cursor Ambassadors Brazil
+Configured for **Cafe Cursor Buenos Aires #4** — Buenos Aires, Argentina
 
 ---
 

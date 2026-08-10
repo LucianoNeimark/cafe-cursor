@@ -65,8 +65,8 @@ export async function sendCreditEmail({
 
   try {
     const subject = locale === "es"
-      ? "🎉 ¡Tu crédito de Cursor ya está aquí! - Cafe Cursor Floripa"
-      : "🎉 Your Cursor credit is here! - Cafe Cursor Floripa";
+      ? "🎉 ¡Tu crédito de Cursor ya está aquí! - Cafe Cursor Buenos Aires #4"
+      : "🎉 Your Cursor credit is here! - Cafe Cursor Buenos Aires #4";
 
     const html = generateEmailHTML({
       name,
@@ -115,8 +115,8 @@ function generateEmailHTML({
   const texts = {
     greeting: isSpanish ? `¡Hola, ${name}!` : `Hello, ${name}!`,
     thanks: isSpanish
-      ? "¡Gracias por participar en Cafe Cursor Floripa!"
-      : "Thank you for joining Cafe Cursor Floripa!",
+      ? "¡Gracias por participar en Cafe Cursor Buenos Aires #4!"
+      : "Thank you for joining Cafe Cursor Buenos Aires #4!",
     intro: isSpanish
       ? "Nos alegra mucho tenerte en nuestra comunidad. Este es tu crédito exclusivo de Cursor IDE:"
       : "We're thrilled to have you in our community. Here's your exclusive Cursor IDE credit:",
@@ -140,8 +140,8 @@ function generateEmailHTML({
       ? "¿Tienes dudas? Comunícate con la organización del evento."
       : "Questions? Contact the event organizers.",
     footer: isSpanish
-      ? "Creado con ☕ por Chris & Alex - Embajadores de Cursor en Brasil"
-      : "Made with ☕ by Chris & Alex - Cursor Ambassador Brasil",
+      ? "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina"
+      : "Cafe Cursor Buenos Aires #4 · Buenos Aires, Argentina",
     companyLabel: isSpanish ? "Empresa" : "Company",
   };
 
@@ -172,7 +172,7 @@ function generateEmailHTML({
           <tr>
             <td align="center" style="padding-bottom: 8px;">
               <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">
-                Cafe Cursor
+                Cafe Cursor Buenos Aires #4
               </h1>
             </td>
           </tr>
@@ -181,7 +181,7 @@ function generateEmailHTML({
           <tr>
             <td align="center" style="padding-bottom: 32px;">
               <p style="margin: 0; font-size: 14px; color: #a3a3a3;">
-                Florianópolis, Brasil
+                Buenos Aires, Argentina
               </p>
             </td>
           </tr>

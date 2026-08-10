@@ -3,7 +3,7 @@ export type Locale = "es" | "en";
 export const translations = {
   es: {
     // Header
-    title: "Cafe Cursor",
+    title: "Cafe Cursor Buenos Aires #4",
     subtitle: "Obtén tu crédito gratuito de Cursor IDE.",
     cta: "Regístrate en segundos.",
     
@@ -19,9 +19,9 @@ export const translations = {
     // Footer
     footerNote: "Solo quienes estén registrados en el evento pueden obtener créditos.",
     onePerPerson: "Un crédito por persona.",
-    madeBy: "Creado por",
-    ambassadors: "Chris & Alex",
-    ambassadorTitle: "Embajadores de Cursor en Brasil",
+    madeBy: "Organizado por",
+    ambassadors: "Cafe Cursor Buenos Aires #4",
+    ambassadorTitle: "Buenos Aires, Argentina",
     poweredBy: "Con tecnología de",
     
     // Badge
@@ -59,14 +59,14 @@ export const translations = {
     
     // Share
     shareOnX: "Compartir en X",
-    shareMessage: "🚀 ¡Acabo de recibir un crédito de @cursor_ai en Cafe Cursor Floripa! Muchas gracias a la comunidad por esta increíble oportunidad de probar el mejor editor de código con IA. #CafeCursorFloripa #CursorAI #DevCommunity",
+    shareMessage: "🚀 ¡Acabo de recibir un crédito de @cursor_ai en Cafe Cursor Buenos Aires #4! Muchas gracias a la comunidad por esta increíble oportunidad de probar el mejor editor de código con IA. #CafeCursorBuenosAires #CursorAI #DevCommunity",
     
     // Email
     emailSent: "📧 ¡También enviamos el crédito a tu correo!",
   },
   "en": {
     // Header
-    title: "Cafe Cursor",
+    title: "Cafe Cursor Buenos Aires #4",
     subtitle: "Get your free Cursor IDE credit.",
     cta: "Register in seconds.",
     
@@ -82,9 +82,9 @@ export const translations = {
     // Footer
     footerNote: "Only registered event attendees can get credits.",
     onePerPerson: "One credit per person.",
-    madeBy: "Made by",
-    ambassadors: "Chris & Alex",
-    ambassadorTitle: "Cursor Ambassador Brasil",
+    madeBy: "Organized by",
+    ambassadors: "Cafe Cursor Buenos Aires #4",
+    ambassadorTitle: "Buenos Aires, Argentina",
     poweredBy: "Powered by",
     
     // Badge
@@ -122,7 +122,7 @@ export const translations = {
     
     // Share
     shareOnX: "Share on X",
-    shareMessage: "🚀 Just got a @cursor_ai credit at Cafe Cursor Floripa! Huge thanks to the community for this amazing opportunity to try the best AI-powered code editor. #CafeCursorFloripa #CursorAI #DevCommunity",
+    shareMessage: "🚀 Just got a @cursor_ai credit at Cafe Cursor Buenos Aires #4! Huge thanks to the community for this amazing opportunity to try the best AI-powered code editor. #CafeCursorBuenosAires #CursorAI #DevCommunity",
     
     // Email
     emailSent: "📧 We sent the credit to your email!",
