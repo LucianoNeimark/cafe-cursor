@@ -119,6 +119,7 @@ export async function POST(request: NextRequest) {
             data: {
               hasClaimed: false,
               claimedAt: null,
+              emailSentAt: null,
               creditId: null,
             },
           }),
@@ -296,6 +297,11 @@ export async function POST(request: NextRequest) {
             { status: 500 }
           );
         }
+
+        await prisma.eligibleUser.update({
+          where: { id: user.id },
+          data: { emailSentAt: new Date() },
+        });
 
         console.log(`📧 [ADMIN] Correo enviado manualmente a: ${user.email}`);
 

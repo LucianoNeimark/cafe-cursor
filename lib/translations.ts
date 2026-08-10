@@ -41,6 +41,10 @@ export const translations = {
     copyLink: "Copiar enlace",
     useCredit: "Usar crédito →",
     saveLink: "Guarda este enlace: es único y personal.",
+    emailSuccessTitle: "¡Revisa tu correo!",
+    emailSuccessMessage: "Enviamos tu crédito de Cursor a la dirección registrada.",
+    emailExistingMessage: "Tu crédito ya fue enviado al correo registrado. Revisa también la carpeta de spam.",
+    emailPrivacyNote: "🔒 Por seguridad, el enlace solo se entrega por correo electrónico.",
     
     // Errors
     notEligible: "Este correo no está registrado para el evento Cafe Cursor. Solo los participantes aprobados pueden obtener créditos.",
@@ -50,6 +54,8 @@ export const translations = {
     thinkError: "¿Crees que se trata de un error? Comunícate con la organización del evento.",
     pendingApproval: "Tu solicitud está pendiente de aprobación.",
     tryAnotherEmail: "Probar con otro correo",
+    emailDeliveryFailed: "Tu crédito quedó reservado, pero no pudimos enviar el correo. Inténtalo nuevamente; no se asignará otro crédito.",
+    retryEmail: "Reintentar el envío",
     
     // Share
     shareOnX: "Compartir en X",
@@ -98,6 +104,10 @@ export const translations = {
     copyLink: "Copy link",
     useCredit: "Use credit →",
     saveLink: "Save this link, it's unique and personal.",
+    emailSuccessTitle: "Check your email!",
+    emailSuccessMessage: "We sent your Cursor credit to the registered email address.",
+    emailExistingMessage: "Your credit was already sent to the registered email. Please check your spam folder too.",
+    emailPrivacyNote: "🔒 For security, the link is only delivered by email.",
     
     // Errors
     notEligible: "This email is not registered for Cafe Cursor event. Only approved attendees can get credits.",
@@ -107,6 +117,8 @@ export const translations = {
     thinkError: "Think this is an error? Contact the event organizer.",
     pendingApproval: "Your request is pending approval.",
     tryAnotherEmail: "Try with another email",
+    emailDeliveryFailed: "Your credit was reserved, but we could not send the email. Try again; another credit will not be assigned.",
+    retryEmail: "Retry email delivery",
     
     // Share
     shareOnX: "Share on X",

@@ -13,11 +13,8 @@ interface RegisterResult {
   credit?: string;
   isExisting?: boolean;
   isTest?: boolean;
-  user?: {
-    name: string;
-    email: string;
-    company?: string;
-  };
+  emailSent?: boolean;
+  creditAssigned?: boolean;
 }
 
 /**
@@ -85,6 +82,11 @@ export function RegisterForm() {
     setEmail("");
   };
 
+  const handleRetryEmail = () => {
+    setStatus("idle");
+    setResult(null);
+  };
+
   // Mapear los códigos de error a sus traducciones.
   const getErrorMessage = (code?: string, originalError?: string): string => {
     switch (code) {
@@ -94,6 +96,8 @@ export function RegisterForm() {
         return t("notApproved");
       case "NO_CREDITS":
         return t("noCreditsAvailable");
+      case "EMAIL_DELIVERY_FAILED":
+        return t("emailDeliveryFailed");
       case "NETWORK_ERROR":
         return t("networkError");
       default:
@@ -102,7 +106,9 @@ export function RegisterForm() {
   };
 
   // Vista de éxito
-  if (status === "success" && result?.credit) {
+  if (status === "success" && result) {
+    const showTestCredit = Boolean(result.isTest && result.credit);
+
     return (
       <div className="w-full max-w-md animate-fade-in">
         <div className="rounded-2xl border border-border bg-background p-8">
@@ -124,60 +130,53 @@ export function RegisterForm() {
           </div>
 
           <h2 className="mb-2 text-center text-xl font-semibold">
-            {result.isExisting ? t("alreadyHaveCredit") : t("successTitle")}
+            {showTestCredit
+              ? (result.isExisting ? t("alreadyHaveCredit") : t("successTitle"))
+              : t("emailSuccessTitle")}
           </h2>
 
           <p className="mb-6 text-center text-sm text-muted">
-            {t("congratsMessage")}
+            {showTestCredit
+              ? t("congratsMessage")
+              : (result.isExisting ? t("emailExistingMessage") : t("emailSuccessMessage"))}
           </p>
 
-          {/* Información del usuario */}
-          {result.user && (
-            <div className="mb-4 rounded-xl border border-border bg-foreground/5 p-3">
-              <p className="text-sm">
-                <span className="text-muted">{t("registeredAs")} </span>
-                <span className="font-medium">{result.user.name}</span>
-              </p>
-              {result.user.company && (
-                <p className="text-xs text-muted mt-1">{result.user.company}</p>
-              )}
-            </div>
+          {showTestCredit && result.credit && (
+            <>
+              {/* Aviso de crédito de prueba */}
+              <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
+                  {t("testWarning")}
+                </p>
+              </div>
+
+              {/* Enlace del crédito de prueba */}
+              <div className="mb-4 rounded-xl border border-border bg-background p-4">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted">
+                  {t("yourCredit")}
+                </p>
+                <p className="break-all font-mono text-sm">{result.credit}</p>
+              </div>
+
+              {/* Botones para el crédito de prueba */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCopyLink}
+                  className="flex-1 rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium transition-colors hover:bg-foreground/5"
+                >
+                  {t("copyLink")}
+                </button>
+                <a
+                  href={result.credit}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 rounded-xl bg-foreground px-4 py-3 text-center text-sm font-medium text-background transition-opacity hover:opacity-90"
+                >
+                  {t("useCredit")}
+                </a>
+              </div>
+            </>
           )}
-
-          {/* Aviso de crédito de prueba */}
-          {result.isTest && (
-            <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
-              <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
-                {t("testWarning")}
-              </p>
-            </div>
-          )}
-
-          {/* Enlace del crédito */}
-          <div className="mb-4 rounded-xl border border-border bg-background p-4">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted">
-              {t("yourCredit")}
-            </p>
-            <p className="break-all font-mono text-sm">{result.credit}</p>
-          </div>
-
-          {/* Botones de acción */}
-          <div className="flex gap-3">
-            <button
-              onClick={handleCopyLink}
-              className="flex-1 rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium transition-colors hover:bg-foreground/5"
-            >
-              {t("copyLink")}
-            </button>
-            <a
-              href={result.credit}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-xl bg-foreground px-4 py-3 text-center text-sm font-medium text-background transition-opacity hover:opacity-90"
-            >
-              {t("useCredit")}
-            </a>
-          </div>
 
           {/* Botón compartir en X */}
           <a
@@ -193,13 +192,17 @@ export function RegisterForm() {
           </a>
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted">
-          {t("saveLink")}
-        </p>
+        {showTestCredit && (
+          <p className="mt-6 text-center text-xs text-muted">
+            {t("saveLink")}
+          </p>
+        )}
 
         {/* Notificación de email */}
         <div className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-[var(--success)]/20 bg-[var(--success)]/5 px-4 py-3">
-          <span className="text-sm text-[var(--success)]">{t("emailSent")}</span>
+          <span className="text-center text-sm text-[var(--success)]">
+            {showTestCredit ? t("emailSent") : t("emailPrivacyNote")}
+          </span>
         </div>
       </div>
     );
@@ -272,10 +275,10 @@ export function RegisterForm() {
             )}
             <button
               type="button"
-              onClick={handleReset}
+              onClick={result.code === "EMAIL_DELIVERY_FAILED" ? handleRetryEmail : handleReset}
               className="mt-3 text-xs text-foreground underline underline-offset-2 hover:no-underline"
             >
-              {t("tryAnotherEmail")}
+              {result.code === "EMAIL_DELIVERY_FAILED" ? t("retryEmail") : t("tryAnotherEmail")}
             </button>
           </div>
         )}

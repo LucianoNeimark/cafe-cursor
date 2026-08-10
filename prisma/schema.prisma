@@ -19,27 +19,28 @@ model EligibleUser {
   role           String?
   approvalStatus String   @default("approved")
   createdAt      DateTime @default(now())
-  
+
   // Si ya reclamó su crédito
-  hasClaimed     Boolean  @default(false)
-  claimedAt      DateTime?
-  
+  hasClaimed  Boolean   @default(false)
+  claimedAt   DateTime?
+  emailSentAt DateTime?
+
   // Relación con el crédito asignado
-  credit         Credit?  @relation(fields: [creditId], references: [id])
-  creditId       String?  @unique
+  credit   Credit? @relation(fields: [creditId], references: [id])
+  creditId String? @unique
 }
 
 // Tabla de créditos de Cursor disponibles
 model Credit {
-  id          String       @id @default(cuid())
-  code        String       @unique  // Código del referral
-  link        String       @unique  // Link completo
-  isUsed      Boolean      @default(false)
-  isTest      Boolean      @default(false)  // Para distinguir créditos de test
-  assignedAt  DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id         String    @id @default(cuid())
+  code       String    @unique // Código del referral
+  link       String    @unique // Link completo
+  isUsed     Boolean   @default(false)
+  isTest     Boolean   @default(false) // Para distinguir créditos de test
+  assignedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   // Relación con el usuario asignado
-  assignedTo  EligibleUser?
+  assignedTo EligibleUser?
 }

@@ -1,6 +1,6 @@
 {
-  "buildCommand": "prisma generate && next build",
-  "installCommand": "npm install",
+  "buildCommand": "npm run build:production",
+  "installCommand": "PRISMA_SCHEMA=production npm install",
   "framework": "nextjs",
   "regions": ["iad1"]
 }

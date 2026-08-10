@@ -4,14 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "node scripts/generate-prisma.mjs local && next build",
+    "build:production": "node scripts/generate-prisma.mjs production && next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio",
-    "db:reset": "prisma db push --force-reset && npm run db:seed",
-    "postinstall": "prisma generate"
+    "db:push": "prisma db push --schema prisma/schema.prisma",
+    "db:push:production": "prisma db push --schema prisma/schema.production.prisma",
+    "db:seed": "node scripts/generate-prisma.mjs local && tsx prisma/seed.ts",
+    "db:import": "node scripts/generate-prisma.mjs local && tsx prisma/import.ts",
+    "db:import:production": "node scripts/generate-prisma.mjs production && tsx prisma/import.ts",
+    "db:studio": "prisma studio --schema prisma/schema.prisma",
+    "db:reset": "prisma db push --schema prisma/schema.prisma --force-reset && npm run db:seed",
+    "postinstall": "node scripts/generate-prisma.mjs"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",

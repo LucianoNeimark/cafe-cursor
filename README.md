@@ -51,7 +51,12 @@ FROM_EMAIL="Your Event <onboarding@resend.dev>"
 # Admin credentials
 ADMIN_USERNAME="admin"
 ADMIN_PASSWORD="your_secure_password"
+SESSION_SECRET="a_unique_random_value_of_at_least_32_characters"
 ```
+
+`RESEND_API_KEY` can stay empty during local development. Emails are then
+simulated in the development-server terminal. Production requires a real
+Resend API key.
 
 ### 4. Set up the database
 
@@ -86,9 +91,12 @@ Default credentials: `admin` / `cafecursor2024`
 
 ## 📦 Data Import
 
+Use the non-destructive importer for real event data. It creates or updates
+records without deleting existing claims and does not add test data.
+
 ### Import Credits (CSV)
 
-Create a CSV file with your Cursor referral links:
+Create `prisma/credits.csv` with your Cursor referral links:
 
 ```csv
 link
@@ -98,15 +106,32 @@ https://cursor.com/referral?code=DEF456
 
 ### Import Eligible Users (CSV)
 
-Create a CSV file with pre-approved attendees:
+Create `prisma/users.csv` with pre-approved attendees:
 
 ```csv
-email,name,company,approval_status
-john@email.com,John Doe,Acme Inc,approved
-jane@email.com,Jane Smith,Tech Corp,approved
+email,name,company,role,approval_status
+john@email.com,John Doe,Acme Inc,Developer,approved
+jane@email.com,Jane Smith,Tech Corp,Designer,approved
 ```
 
-Place both files in the project root and update `prisma/seed.ts` with your file paths.
+The real CSV files are ignored by Git and must not be committed. Import them
+into the local database with:
+
+```bash
+npm run db:import
+```
+
+To import into the production PostgreSQL database, configure
+`POSTGRES_PRISMA_URL` and `POSTGRES_URL_NON_POOLING` in your local `.env`, then
+run:
+
+```bash
+npm run db:import:production
+```
+
+Unlike `db:seed`, the import commands are safe to run again and do not clear
+assignments. `npm run db:seed` remains a destructive local reset tool that also
+adds sample and test records.
 
 ## 🌐 Deploy to Vercel
 
@@ -123,15 +148,31 @@ git push -u origin main
 ### 2. Deploy on Vercel
 
 1. Go to [vercel.com](https://vercel.com) and import your repository
-2. Add environment variables in Vercel dashboard:
-   - `DATABASE_URL` - Your PostgreSQL connection string
-   - `DIRECT_URL` - Direct database URL (same as DATABASE_URL for most providers)
-   - `RESEND_API_KEY` - Your Resend API key
-   - `FROM_EMAIL` - Sender email address
-   - `ADMIN_USERNAME` - Admin username
-   - `ADMIN_PASSWORD` - Admin password
+2. Create a persistent PostgreSQL database and add these values to your local
+   `.env` for the one-time schema setup:
+   - `POSTGRES_PRISMA_URL` - Pooled PostgreSQL connection string
+   - `POSTGRES_URL_NON_POOLING` - Direct PostgreSQL connection string
 
-3. Deploy! 🚀
+3. Create the production tables:
+
+```bash
+npm run db:push:production
+```
+
+4. Add environment variables in the Vercel dashboard:
+   - `POSTGRES_PRISMA_URL` - Pooled PostgreSQL connection string
+   - `POSTGRES_URL_NON_POOLING` - Direct PostgreSQL connection string
+   - `RESEND_API_KEY` - Your Resend API key
+   - `FROM_EMAIL` - Sender on your verified Resend domain
+   - `ADMIN_USERNAME` - Admin username
+   - `ADMIN_PASSWORD` - Unique password of at least 12 characters
+   - `SESSION_SECRET` - Unique random value of at least 32 characters
+
+5. Deploy! 🚀
+
+Production builds use `prisma/schema.production.prisma`; local development
+continues to use SQLite through `prisma/schema.prisma`. Real credit links are
+only sent by email and are never returned by the public registration API.
 
 ### Recommended Database Providers
 

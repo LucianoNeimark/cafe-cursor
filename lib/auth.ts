@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { createHmac, timingSafeEqual } from "crypto";
 
 // Nombre de la cookie de sesión
 const SESSION_COOKIE = "cafe-cursor-admin-session";
@@ -8,10 +9,37 @@ const SESSION_COOKIE = "cafe-cursor-admin-session";
  * NOTA: Usamos .trim() para eliminar espacios/saltos de línea que pueden venir en las env vars
  */
 function getAdminCredentials() {
-  const username = (process.env.ADMIN_USERNAME || "admin").trim();
-  const password = (process.env.ADMIN_PASSWORD || "cafecursor2024").trim();
-  const secret = (process.env.SESSION_SECRET || "cafe-cursor-secret-key-2024").trim();
+  const isProduction = process.env.NODE_ENV === "production";
+  const username = (process.env.ADMIN_USERNAME || (isProduction ? "" : "admin")).trim();
+  const password = (process.env.ADMIN_PASSWORD || (isProduction ? "" : "cafecursor2024")).trim();
+  const secret = (process.env.SESSION_SECRET || (isProduction ? "" : "cafe-cursor-secret-key-2024")).trim();
+  const usesDevelopmentPassword = password === "cafecursor2024" || password === "your_secure_password_here";
+  const usesDevelopmentSecret = secret === "cafe-cursor-secret-key-2024" || secret === "cafe-cursor-local-development-secret";
+
+  if (isProduction && (
+    !username ||
+    password.length < 12 ||
+    secret.length < 32 ||
+    usesDevelopmentPassword ||
+    usesDevelopmentSecret
+  )) {
+    throw new Error(
+      "ADMIN_USERNAME, ADMIN_PASSWORD (12+ caracteres) y SESSION_SECRET (32+ caracteres) son obligatorios en producción"
+    );
+  }
+
   return { username, password, secret };
+}
+
+function safeEqual(left: string, right: string): boolean {
+  const leftBuffer = Buffer.from(left);
+  const rightBuffer = Buffer.from(right);
+
+  return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+function signPayload(payload: string, secret: string): string {
+  return createHmac("sha256", secret).update(payload).digest("base64url");
 }
 
 /**
@@ -19,7 +47,7 @@ function getAdminCredentials() {
  */
 export function verifyCredentials(username: string, password: string): boolean {
   const credentials = getAdminCredentials();
-  return username === credentials.username && password === credentials.password;
+  return safeEqual(username, credentials.username) && safeEqual(password, credentials.password);
 }
 
 /**
@@ -27,10 +55,12 @@ export function verifyCredentials(username: string, password: string): boolean {
  */
 export function createSessionToken(): string {
   const { username, secret } = getAdminCredentials();
-  const timestamp = Date.now();
-  const data = `${username}:${timestamp}:${secret}`;
-  // Simple base64 encoding (en producción usar JWT)
-  return Buffer.from(data).toString("base64");
+  const payload = Buffer.from(
+    JSON.stringify({ username, timestamp: Date.now() })
+  ).toString("base64url");
+  const signature = signPayload(payload, secret);
+
+  return `${payload}.${signature}`;
 }
 
 /**
@@ -39,19 +69,26 @@ export function createSessionToken(): string {
 export function verifySessionToken(token: string): boolean {
   try {
     const credentials = getAdminCredentials();
-    const decoded = Buffer.from(token, "base64").toString("utf-8");
-    const [username, timestamp, secret] = decoded.split(":");
-    
+    const tokenParts = token.split(".");
+    if (tokenParts.length !== 2) return false;
+
+    const [payload, signature] = tokenParts;
+    const expectedSignature = signPayload(payload, credentials.secret);
+    if (!safeEqual(signature, expectedSignature)) return false;
+
+    const decoded = JSON.parse(Buffer.from(payload, "base64url").toString("utf-8"));
+    const username = typeof decoded.username === "string" ? decoded.username : "";
+    const tokenTime = typeof decoded.timestamp === "number" ? decoded.timestamp : NaN;
+
     // Verificar que el token no tenga más de 24 horas
-    const tokenTime = parseInt(timestamp, 10);
     const now = Date.now();
     const maxAge = 24 * 60 * 60 * 1000; // 24 horas
-    
-    if (now - tokenTime > maxAge) {
+
+    if (!Number.isFinite(tokenTime) || tokenTime > now + 60_000 || now - tokenTime > maxAge) {
       return false;
     }
-    
-    return username === credentials.username && secret === credentials.secret;
+
+    return safeEqual(username, credentials.username);
   } catch {
     return false;
   }

@@ -21,6 +21,7 @@ interface EligibleUser {
   approvalStatus: string;
   hasClaimed: boolean;
   claimedAt: string | null;
+  emailSentAt: string | null;
   credit: Credit | null;
 }
 
@@ -302,10 +303,15 @@ export default function AdminDashboard() {
                     </td>
                     <td className="px-4 py-3">
                       {user.hasClaimed ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-green-500/20 px-2 py-1 text-xs text-green-400">
-                          ✓ {user.credit?.code}
-                          {user.credit?.isTest && " (TEST)"}
-                        </span>
+                        <div className="flex flex-col items-start gap-1">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-green-500/20 px-2 py-1 text-xs text-green-400">
+                            ✓ {user.credit?.code}
+                            {user.credit?.isTest && " (PRUEBA)"}
+                          </span>
+                          <span className={`text-xs ${user.emailSentAt ? "text-cyan-400" : "text-amber-400"}`}>
+                            {user.emailSentAt ? "Correo enviado" : "Correo pendiente"}
+                          </span>
+                        </div>
                       ) : (
                         <span className="text-gray-500">Sin asignar</span>
                       )}

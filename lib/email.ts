@@ -1,31 +1,15 @@
 import { Resend } from "resend";
-import { readFileSync, existsSync } from "fs";
-import { join } from "path";
 
-// Load API key from environment or .env file
+// Next.js carga .env en process.env; una cadena vacía activa el modo simulado.
 function getResendApiKey(): string | null {
-  // First try from process.env (works in production)
-  if (process.env.RESEND_API_KEY) {
-    return process.env.RESEND_API_KEY;
-  }
-  
-  // Fallback: read directly from .env file (development)
-  const envPath = join(process.cwd(), ".env");
-  if (existsSync(envPath)) {
-    const envContent = readFileSync(envPath, "utf-8");
-    const match = envContent.match(/RESEND_API_KEY=(.+)/);
-    if (match && match[1]) {
-      return match[1].trim();
-    }
-  }
-  
-  return null;
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  return apiKey || null;
 }
 
 // Función para obtener cliente Resend (lazy initialization)
 function getResendClient(): Resend | null {
   const apiKey = getResendApiKey();
-  console.log(`📧 [EMAIL] Verificando API key: ${apiKey ? "✅ Configurada (" + apiKey.substring(0, 10) + "...)" : "❌ No encontrada"}`);
+  console.log(`📧 [EMAIL] API de correo: ${apiKey ? "✅ Configurada" : "❌ No configurada"}`);
   if (!apiKey) {
     return null;
   }
@@ -60,8 +44,13 @@ export async function sendCreditEmail({
   // Obtener cliente Resend (lazy)
   const resendClient = getResendClient();
   
-  // Si no hay Resend configurado, solo logear (modo desarrollo)
+  // La simulación solo es segura durante el desarrollo local.
   if (!resendClient) {
+    if (process.env.NODE_ENV === "production") {
+      console.error("❌ [EMAIL] RESEND_API_KEY no está configurada en producción");
+      return { success: false, error: "Servicio de correo no configurado" };
+    }
+
     console.log(`📧 [EMAIL] Modo desarrollo - Email simulado`);
     console.log(`   📬 Para: ${to}`);
     console.log(`   👤 Nombre: ${name}`);
@@ -88,7 +77,7 @@ export async function sendCreditEmail({
       locale,
     });
 
-    console.log(`📧 [EMAIL] Enviando email real a: ${to}`);
+    console.log("📧 [EMAIL] Enviando correo real");
     
     const { error } = await resendClient.emails.send({
       from: FROM_EMAIL,
@@ -98,11 +87,11 @@ export async function sendCreditEmail({
     });
 
     if (error) {
-      console.error(`❌ [EMAIL] Error enviando a ${to}:`, error);
+      console.error(`❌ [EMAIL] Error de Resend: ${error.message}`);
       return { success: false, error: error.message };
     }
 
-    console.log(`✅ [EMAIL] Enviado exitosamente a: ${to}`);
+    console.log("✅ [EMAIL] Correo enviado correctamente");
     return { success: true };
   } catch (error) {
     console.error(`❌ [EMAIL] Error inesperado:`, error);
