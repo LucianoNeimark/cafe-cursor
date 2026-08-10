@@ -1,6 +1,6 @@
 # ☕ Cafe Cursor
 
-> A modern, secure credit distribution system for Cursor IDE community events.
+> A modern, secure credit distribution system for Cursor community events.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)

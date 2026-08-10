@@ -6,12 +6,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Cafe Cursor Buenos Aires #4 | Obtén tu crédito gratuito",
-  description: "Regístrate para obtener tu crédito gratuito de Cursor IDE en Cafe Cursor Buenos Aires #4.",
+  description: "Regístrate para obtener tu crédito gratuito de Cursor en Cafe Cursor Buenos Aires #4.",
   keywords: ["cursor", "ide", "crédito", "desarrolladores", "programación"],
   authors: [{ name: "Cafe Cursor" }],
   openGraph: {
     title: "Cafe Cursor Buenos Aires #4 | Obtén tu crédito gratuito",
-    description: "Regístrate para obtener tu crédito gratuito de Cursor IDE en Cafe Cursor Buenos Aires #4",
+    description: "Regístrate para obtener tu crédito gratuito de Cursor en Cafe Cursor Buenos Aires #4",
     type: "website",
   },
 };

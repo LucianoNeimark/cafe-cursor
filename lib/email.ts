@@ -118,8 +118,8 @@ function generateEmailHTML({
       ? "¡Gracias por participar en Cafe Cursor Buenos Aires #4!"
       : "Thank you for joining Cafe Cursor Buenos Aires #4!",
     intro: isSpanish
-      ? "Nos alegra mucho tenerte en nuestra comunidad. Este es tu crédito exclusivo de Cursor IDE:"
-      : "We're thrilled to have you in our community. Here's your exclusive Cursor IDE credit:",
+      ? "Nos alegra mucho tenerte en nuestra comunidad. Este es tu crédito exclusivo de Cursor:"
+      : "We're thrilled to have you in our community. Here's your exclusive Cursor credit:",
     yourCredit: isSpanish ? "Tu crédito de Cursor" : "Your Cursor Credit",
     code: isSpanish ? "Código" : "Code",
     useCredit: isSpanish ? "Usar mi crédito" : "Use My Credit",

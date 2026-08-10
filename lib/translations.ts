@@ -4,7 +4,7 @@ export const translations = {
   es: {
     // Header
     title: "Cafe Cursor Buenos Aires #4",
-    subtitle: "Obtén tu crédito gratuito de Cursor IDE.",
+    subtitle: "Obtén tu crédito gratuito de Cursor.",
     cta: "Regístrate en segundos.",
     
     // Form
@@ -67,7 +67,7 @@ export const translations = {
   "en": {
     // Header
     title: "Cafe Cursor Buenos Aires #4",
-    subtitle: "Get your free Cursor IDE credit.",
+    subtitle: "Get your free Cursor credit.",
     cta: "Register in seconds.",
     
     // Form
