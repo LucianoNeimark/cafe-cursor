@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         { assignedAt: "desc" },
         { createdAt: "desc" },
       ],
-      take: 100,
+      take: 200,
     });
 
     // Obtener usuarios elegibles con sus créditos
