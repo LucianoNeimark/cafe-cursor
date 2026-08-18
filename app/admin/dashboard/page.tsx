@@ -60,6 +60,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [showAddCreditModal, setShowAddCreditModal] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -74,7 +75,7 @@ export default function AdminDashboard() {
       } else {
         setData(json);
       }
-    } catch (err) {
+    } catch {
       setError("Error al cargar datos");
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ export default function AdminDashboard() {
     router.push("/admin");
   };
 
-  const executeAction = async (action: string, actionData: Record<string, unknown>) => {
+  const executeAction = async (action: string, actionData: Record<string, unknown>): Promise<boolean> => {
     setActionLoading(true);
     try {
       const res = await fetch("/api/admin/actions", {
@@ -102,12 +103,15 @@ export default function AdminDashboard() {
       const json = await res.json();
       if (json.error) {
         alert(`Error: ${json.error}`);
+        return false;
       } else {
         alert(json.message || "Acción completada");
-        fetchDashboard(); // Recargar datos
+        await fetchDashboard(); // Recargar datos
+        return true;
       }
-    } catch (err) {
+    } catch {
       alert("Error ejecutando acción");
+      return false;
     } finally {
       setActionLoading(false);
     }
@@ -126,7 +130,7 @@ export default function AdminDashboard() {
   };
 
   const handleSendEmail = async (userId: string, email: string) => {
-    const locale = confirm(`¿Enviar el correo en español?\n\nAceptar = Español (es)\nCancelar = Inglés (en)`) ? "es" : "en";
+    const locale = confirm(`¿Enviar el crédito a ${email} en español?\n\nAceptar = Español (es)\nCancelar = Inglés (en)`) ? "es" : "en";
     await executeAction("SEND_CREDIT_EMAIL", { userId, locale });
   };
 
@@ -137,6 +141,28 @@ export default function AdminDashboard() {
 
     if (confirm(message)) {
       await executeAction("SET_CREDIT_USED", { creditId: credit.id, isUsed });
+    }
+  };
+
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUserIds((current) => {
+      const next = new Set(current);
+      if (next.has(userId)) {
+        next.delete(userId);
+      } else {
+        next.add(userId);
+      }
+      return next;
+    });
+  };
+
+  const handleDeleteSelectedUsers = async () => {
+    const userIds = [...selectedUserIds];
+    if (userIds.length === 0) return;
+
+    if (confirm(`¿Eliminar definitivamente ${userIds.length} ${userIds.length === 1 ? "usuario" : "usuarios"} sin crédito reclamado?`)) {
+      const success = await executeAction("DELETE_USERS", { userIds });
+      if (success) setSelectedUserIds(new Set());
     }
   };
 
@@ -153,6 +179,24 @@ export default function AdminDashboard() {
       c.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.link.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const selectableFilteredUserIds = filteredUsers
+    ?.filter((user) => !user.hasClaimed && !user.credit)
+    .map((user) => user.id) || [];
+  const allFilteredUsersSelected = selectableFilteredUserIds.length > 0
+    && selectableFilteredUserIds.every((userId) => selectedUserIds.has(userId));
+
+  const toggleAllFilteredUsers = () => {
+    setSelectedUserIds((current) => {
+      const next = new Set(current);
+      if (allFilteredUsersSelected) {
+        selectableFilteredUserIds.forEach((userId) => next.delete(userId));
+      } else {
+        selectableFilteredUserIds.forEach((userId) => next.add(userId));
+      }
+      return next;
+    });
+  };
 
   if (loading) {
     return (
@@ -262,7 +306,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Búsqueda y acciones */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <input
               type="text"
               placeholder="Buscar..."
@@ -270,6 +314,24 @@ export default function AdminDashboard() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm placeholder:text-gray-500 focus:border-white focus:outline-none"
             />
+            {activeTab === "users" && selectedUserIds.size > 0 && (
+              <button
+                onClick={handleDeleteSelectedUsers}
+                disabled={actionLoading}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+              >
+                Eliminar seleccionados ({selectedUserIds.size})
+              </button>
+            )}
+            {activeTab === "credits" && (
+              <a
+                href="/api/admin/credits/export"
+                download
+                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium hover:bg-emerald-700"
+              >
+                ↓ Descargar disponibles CSV
+              </a>
+            )}
             <button
               onClick={() => setShowAddUserModal(true)}
               className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium hover:bg-green-700"
@@ -298,6 +360,16 @@ export default function AdminDashboard() {
             <table className="w-full text-left text-sm">
               <thead className="border-b border-gray-800 bg-gray-900/50">
                 <tr>
+                  <th className="w-10 px-4 py-3 font-medium">
+                    <input
+                      type="checkbox"
+                      checked={allFilteredUsersSelected}
+                      onChange={toggleAllFilteredUsers}
+                      disabled={selectableFilteredUserIds.length === 0 || actionLoading}
+                      aria-label="Seleccionar todos los usuarios visibles sin crédito"
+                      className="h-4 w-4 rounded border-gray-700 bg-gray-900"
+                    />
+                  </th>
                   <th className="px-4 py-3 font-medium">Correo</th>
                   <th className="px-4 py-3 font-medium">Nombre</th>
                   <th className="px-4 py-3 font-medium">Empresa</th>
@@ -308,7 +380,21 @@ export default function AdminDashboard() {
               </thead>
               <tbody className="divide-y divide-gray-800">
                 {filteredUsers?.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-900/50">
+                  <tr
+                    key={user.id}
+                    className={selectedUserIds.has(user.id) ? "bg-red-950/20" : "hover:bg-gray-900/50"}
+                  >
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedUserIds.has(user.id)}
+                        onChange={() => toggleUserSelection(user.id)}
+                        disabled={user.hasClaimed || Boolean(user.credit) || actionLoading}
+                        aria-label={`Seleccionar a ${user.email}`}
+                        title={user.hasClaimed || user.credit ? "Revoca el crédito antes de eliminar este usuario" : "Seleccionar usuario"}
+                        className="h-4 w-4 rounded border-gray-700 bg-gray-900 disabled:cursor-not-allowed disabled:opacity-30"
+                      />
+                    </td>
                     <td className="px-4 py-3 font-mono text-xs">{user.email}</td>
                     <td className="px-4 py-3">{user.name}</td>
                     <td className="px-4 py-3 text-gray-400">{user.company || "-"}</td>

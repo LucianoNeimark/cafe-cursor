@@ -173,6 +173,66 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      case "DELETE_USERS": {
+        // Eliminar en lote únicamente usuarios que todavía no reclamaron crédito.
+        const rawUserIds: unknown[] = Array.isArray(data?.userIds) ? data.userIds : [];
+        const userIds = Array.from(new Set<string>(
+          rawUserIds.filter((id): id is string => typeof id === "string" && id.length > 0)
+        ));
+
+        if (userIds.length === 0) {
+          return NextResponse.json(
+            { error: "Selecciona al menos un usuario" },
+            { status: 400 }
+          );
+        }
+
+        const users = await prisma.eligibleUser.findMany({
+          where: { id: { in: userIds } },
+          select: {
+            id: true,
+            email: true,
+            hasClaimed: true,
+            creditId: true,
+          },
+        });
+
+        if (users.length !== userIds.length) {
+          return NextResponse.json(
+            { error: "Uno o más usuarios seleccionados ya no existen" },
+            { status: 400 }
+          );
+        }
+
+        const usersWithCredits = users.filter((user) => user.hasClaimed || user.creditId);
+        if (usersWithCredits.length > 0) {
+          return NextResponse.json(
+            {
+              error: `No se pueden eliminar usuarios con créditos reclamados: ${usersWithCredits
+                .map((user) => user.email)
+                .join(", ")}`,
+            },
+            { status: 400 }
+          );
+        }
+
+        const result = await prisma.eligibleUser.deleteMany({
+          where: {
+            id: { in: userIds },
+            hasClaimed: false,
+            creditId: null,
+          },
+        });
+
+        console.log(`🗑️ [ADMIN] Usuarios sin crédito eliminados: ${result.count}`);
+
+        return NextResponse.json({
+          success: true,
+          message: `${result.count} ${result.count === 1 ? "usuario eliminado" : "usuarios eliminados"}`,
+          deletedCount: result.count,
+        });
+      }
+
       case "UPDATE_USER_STATUS": {
         // Actualizar estado de aprobación de usuario
         const { userId, approvalStatus } = data;
