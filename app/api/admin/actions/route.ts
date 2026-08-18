@@ -222,6 +222,61 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      case "SET_CREDIT_USED": {
+        // Marcar un crédito como usado/disponible sin asignarlo a un usuario.
+        const { creditId, isUsed } = data;
+
+        if (typeof creditId !== "string" || typeof isUsed !== "boolean") {
+          return NextResponse.json(
+            { error: "Datos de crédito inválidos" },
+            { status: 400 }
+          );
+        }
+
+        const credit = await prisma.credit.findUnique({
+          where: { id: creditId },
+          include: { assignedTo: true },
+        });
+
+        if (!credit) {
+          return NextResponse.json(
+            { error: "Crédito no encontrado" },
+            { status: 404 }
+          );
+        }
+
+        // Los créditos ligados a usuarios deben gestionarse desde la tabla de usuarios
+        // para mantener ambas partes de la asignación sincronizadas.
+        if (credit.assignedTo) {
+          return NextResponse.json(
+            { error: "Este crédito está asignado a un usuario. Revócalo desde la pestaña Usuarios." },
+            { status: 400 }
+          );
+        }
+
+        if (credit.isUsed === isUsed) {
+          return NextResponse.json({
+            success: true,
+            message: `El crédito ${credit.code} ya está ${isUsed ? "usado" : "disponible"}`,
+          });
+        }
+
+        await prisma.credit.update({
+          where: { id: creditId },
+          data: {
+            isUsed,
+            assignedAt: isUsed ? new Date() : null,
+          },
+        });
+
+        console.log(`📝 [ADMIN] Crédito ${isUsed ? "marcado como usado" : "marcado como disponible"}: ${credit.code}`);
+
+        return NextResponse.json({
+          success: true,
+          message: `Crédito ${credit.code} marcado como ${isUsed ? "usado" : "disponible"}`,
+        });
+      }
+
       case "DELETE_CREDIT": {
         // Eliminar crédito (solo si no está asignado)
         const { creditId } = data;

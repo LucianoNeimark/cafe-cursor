@@ -11,6 +11,10 @@ interface Credit {
   isTest: boolean;
   assignedAt: string | null;
   createdAt: string;
+  assignedTo: {
+    id: string;
+    email: string;
+  } | null;
 }
 
 interface EligibleUser {
@@ -124,6 +128,16 @@ export default function AdminDashboard() {
   const handleSendEmail = async (userId: string, email: string) => {
     const locale = confirm(`¿Enviar el correo en español?\n\nAceptar = Español (es)\nCancelar = Inglés (en)`) ? "es" : "en";
     await executeAction("SEND_CREDIT_EMAIL", { userId, locale });
+  };
+
+  const handleSetCreditUsed = async (credit: Credit, isUsed: boolean) => {
+    const message = isUsed
+      ? `¿Marcar el crédito ${credit.code} como usado? Ya no podrá asignarse a un usuario.`
+      : `¿Marcar el crédito ${credit.code} como disponible nuevamente?`;
+
+    if (confirm(message)) {
+      await executeAction("SET_CREDIT_USED", { creditId: credit.id, isUsed });
+    }
   };
 
   // Filtrar datos
@@ -374,7 +388,8 @@ export default function AdminDashboard() {
                   <th className="px-4 py-3 font-medium">Enlace</th>
                   <th className="px-4 py-3 font-medium">Tipo</th>
                   <th className="px-4 py-3 font-medium">Estado</th>
-                  <th className="px-4 py-3 font-medium">Asignado</th>
+                  <th className="px-4 py-3 font-medium">Fecha</th>
+                  <th className="px-4 py-3 font-medium">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
@@ -396,7 +411,11 @@ export default function AdminDashboard() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {credit.isUsed ? (
+                      {credit.assignedTo ? (
+                        <span className="rounded-full bg-blue-500/20 px-2 py-1 text-xs text-blue-400">
+                          Asignado
+                        </span>
+                      ) : credit.isUsed ? (
                         <span className="rounded-full bg-orange-500/20 px-2 py-1 text-xs text-orange-400">
                           Usado
                         </span>
@@ -410,6 +429,28 @@ export default function AdminDashboard() {
                       {credit.assignedAt
                         ? new Date(credit.assignedAt).toLocaleDateString("es")
                         : "-"}
+                    </td>
+                    <td className="px-4 py-3">
+                      {credit.assignedTo ? (
+                        <span
+                          className="text-xs text-gray-500"
+                          title={`Asignado a ${credit.assignedTo.email}`}
+                        >
+                          Gestionar en Usuarios
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleSetCreditUsed(credit, !credit.isUsed)}
+                          disabled={actionLoading}
+                          className={`rounded px-2 py-1 text-xs disabled:opacity-50 ${
+                            credit.isUsed
+                              ? "border border-gray-600 hover:bg-gray-800"
+                              : "bg-orange-600 hover:bg-orange-700"
+                          }`}
+                        >
+                          {credit.isUsed ? "Hacer disponible" : "Marcar usado"}
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
