@@ -5,13 +5,13 @@ import { LanguageProvider } from "@/components/LanguageContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Cafe Cursor Buenos Aires #4 | Obtén tu crédito gratuito",
-  description: "Regístrate para obtener tu crédito gratuito de Cursor en Cafe Cursor Buenos Aires #4.",
-  keywords: ["cursor", "ide", "crédito", "desarrolladores", "programación"],
-  authors: [{ name: "Cafe Cursor" }],
+  title: "Grok Bot Meetup Buenos Aires | Obtén tu crédito de Grok",
+  description: "Regístrate para obtener tu crédito de Grok en el Grok Bot Meetup Buenos Aires, un evento de SpaceXAI.",
+  keywords: ["grok", "spacexai", "meetup", "crédito", "buenos aires"],
+  authors: [{ name: "SpaceXAI" }],
   openGraph: {
-    title: "Cafe Cursor Buenos Aires #4 | Obtén tu crédito gratuito",
-    description: "Regístrate para obtener tu crédito gratuito de Cursor en Cafe Cursor Buenos Aires #4",
+    title: "Grok Bot Meetup Buenos Aires | Obtén tu crédito de Grok",
+    description: "Regístrate para obtener tu crédito de Grok en el Grok Bot Meetup Buenos Aires, un evento de SpaceXAI.",
     type: "website",
   },
 };

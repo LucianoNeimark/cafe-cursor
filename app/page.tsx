@@ -6,7 +6,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/components/LanguageContext";
 
 /**
- * Página de inicio de Cafe Cursor.
+ * Página de inicio del Grok Bot Meetup.
  * Estilo minimalista inspirado en Luma.
  */
 export default function Home() {
@@ -24,7 +24,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="mb-12 text-center animate-fade-in">
-        {/* Logo Oficial do Cursor - Cubo 3D */}
+        {/* Logo del evento */}
         <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center">
           <svg
             className="h-16 w-16"
@@ -75,7 +75,7 @@ export default function Home() {
             {t("ambassadorTitle")}
           </p>
           
-          {/* Powered by Cursor */}
+          {/* Powered by SpaceXAI */}
           <div className="mt-4 flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-2 backdrop-blur-sm">
             <span className="text-xs text-muted">{t("poweredBy")}</span>
             <svg
@@ -90,7 +90,7 @@ export default function Home() {
                 className="text-foreground"
               />
             </svg>
-            <span className="text-xs font-semibold text-foreground">Cursor</span>
+            <span className="text-xs font-semibold text-foreground">SpaceXAI</span>
           </div>
         </div>
       </footer>

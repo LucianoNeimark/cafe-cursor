@@ -18,7 +18,7 @@ interface RegisterResult {
 }
 
 /**
- * Formulario de registro para obtener un crédito de Cursor.
+ * Formulario de registro para obtener un crédito de Grok.
  * Solo pueden registrarse usuarios elegibles y aprobados para el evento.
  */
 export function RegisterForm() {

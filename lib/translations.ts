@@ -3,9 +3,9 @@ export type Locale = "es" | "en";
 export const translations = {
   es: {
     // Header
-    title: "Cafe Cursor Buenos Aires #4",
-    subtitle: "Obtén tu crédito gratuito de Cursor.",
-    cta: "Regístrate en segundos.",
+    title: "Grok Bot Meetup Buenos Aires",
+    subtitle: "Compañeros de trabajo con IA, de SpaceXAI. Miércoles 16 de septiembre, 18:00–20:00. Buenos Aires.",
+    cta: "Obtén tu crédito de Grok.",
     
     // Form
     nameLabel: "Nombre",
@@ -19,9 +19,9 @@ export const translations = {
     // Footer
     footerNote: "Solo quienes estén registrados en el evento pueden obtener créditos.",
     onePerPerson: "Un crédito por persona.",
-    madeBy: "Creado por",
-    ambassadors: "Chris & Alex",
-    ambassadorTitle: "Adaptado para Buenos Aires por Luciano",
+    madeBy: "Organizado por",
+    ambassadors: "Daniel Guzman, Luciano Neimark y Mariana Besseghini",
+    ambassadorTitle: "SpaceXAI para Buenos Aires, Argentina",
     poweredBy: "Con tecnología de",
     
     // Badge
@@ -34,20 +34,20 @@ export const translations = {
     // Success
     successTitle: "¡Crédito asignado!",
     alreadyHaveCredit: "¡Ya tienes tu crédito!",
-    congratsMessage: "¡Felicitaciones! Este es tu crédito de Cursor:",
+    congratsMessage: "¡Felicitaciones! Este es tu crédito de Grok:",
     registeredAs: "Registrado como:",
     testWarning: "⚠️ Este es un crédito de PRUEBA (no es válido para uso real)",
-    yourCredit: "Tu crédito de Cursor",
+    yourCredit: "Tu crédito de Grok",
     copyLink: "Copiar enlace",
     useCredit: "Usar crédito →",
     saveLink: "Guarda este enlace: es único y personal.",
     emailSuccessTitle: "¡Revisa tu correo!",
-    emailSuccessMessage: "Enviamos tu crédito de Cursor a la dirección registrada.",
+    emailSuccessMessage: "Enviamos tu crédito de Grok a la dirección registrada.",
     emailExistingMessage: "Tu crédito ya fue enviado al correo registrado. Revisa también la carpeta de spam.",
     emailPrivacyNote: "🔒 Por seguridad, el enlace solo se entrega por correo electrónico.",
     
     // Errors
-    notEligible: "Este correo no está registrado para el evento Cafe Cursor. Solo los participantes aprobados pueden obtener créditos.",
+    notEligible: "Este correo no está registrado para el Grok Bot Meetup. Solo los participantes aprobados pueden obtener créditos.",
     notApproved: "Tu inscripción al evento aún no fue aprobada. Comunícate con la organización.",
     noCreditsAvailable: "Lo sentimos, no hay créditos disponibles en este momento. Comunícate con la organización.",
     networkError: "Error de conexión. Inténtalo de nuevo.",
@@ -59,16 +59,16 @@ export const translations = {
     
     // Share
     shareOnX: "Compartir en X",
-    shareMessage: "🚀 ¡Acabo de recibir un crédito de @cursor_ai en Cafe Cursor Buenos Aires #4! Muchas gracias a la comunidad por esta increíble oportunidad de probar el mejor editor de código con IA. #CafeCursorBuenosAires #CursorAI #DevCommunity",
+    shareMessage: "🚀 Acabo de recibir un crédito de Grok en el Grok Bot Meetup Buenos Aires. Gracias a SpaceXAI y a la comunidad. #GrokBotMeetup #SpaceXAI #Grok",
     
     // Email
     emailSent: "📧 ¡También enviamos el crédito a tu correo!",
   },
   "en": {
     // Header
-    title: "Cafe Cursor Buenos Aires #4",
-    subtitle: "Get your free Cursor credit.",
-    cta: "Register in seconds.",
+    title: "Grok Bot Meetup Buenos Aires",
+    subtitle: "AI coworkers from SpaceXAI. Wednesday, September 16, 18:00–20:00. Buenos Aires.",
+    cta: "Get your Grok credit.",
     
     // Form
     nameLabel: "Name",
@@ -82,9 +82,9 @@ export const translations = {
     // Footer
     footerNote: "Only registered event attendees can get credits.",
     onePerPerson: "One credit per person.",
-    madeBy: "Made by",
-    ambassadors: "Chris & Alex",
-    ambassadorTitle: "Adapted for Buenos Aires by Luciano",
+    madeBy: "Hosted by",
+    ambassadors: "Daniel Guzman, Luciano Neimark, and Mariana Besseghini",
+    ambassadorTitle: "SpaceXAI for Buenos Aires, Argentina",
     poweredBy: "Powered by",
     
     // Badge
@@ -97,20 +97,20 @@ export const translations = {
     // Success
     successTitle: "Credit assigned!",
     alreadyHaveCredit: "You already have your credit!",
-    congratsMessage: "Congratulations! Here's your Cursor credit:",
+    congratsMessage: "Congratulations! Here's your Grok credit:",
     registeredAs: "Registered as:",
     testWarning: "⚠️ This is a TEST credit (not valid for real use)",
-    yourCredit: "Your Cursor credit",
+    yourCredit: "Your Grok credit",
     copyLink: "Copy link",
     useCredit: "Use credit →",
     saveLink: "Save this link, it's unique and personal.",
     emailSuccessTitle: "Check your email!",
-    emailSuccessMessage: "We sent your Cursor credit to the registered email address.",
+    emailSuccessMessage: "We sent your Grok credit to the registered email address.",
     emailExistingMessage: "Your credit was already sent to the registered email. Please check your spam folder too.",
     emailPrivacyNote: "🔒 For security, the link is only delivered by email.",
     
     // Errors
-    notEligible: "This email is not registered for Cafe Cursor event. Only approved attendees can get credits.",
+    notEligible: "This email is not registered for the Grok Bot Meetup. Only approved attendees can get credits.",
     notApproved: "Your event registration hasn't been approved yet. Please contact the organizer.",
     noCreditsAvailable: "Sorry, no credits are available at the moment. Please contact the organizer.",
     networkError: "Connection error. Please try again.",
@@ -122,7 +122,7 @@ export const translations = {
     
     // Share
     shareOnX: "Share on X",
-    shareMessage: "🚀 Just got a @cursor_ai credit at Cafe Cursor Buenos Aires #4! Huge thanks to the community for this amazing opportunity to try the best AI-powered code editor. #CafeCursorBuenosAires #CursorAI #DevCommunity",
+    shareMessage: "🚀 Just got a Grok credit at the Grok Bot Meetup Buenos Aires. Thanks to SpaceXAI and the community. #GrokBotMeetup #SpaceXAI #Grok",
     
     // Email
     emailSent: "📧 We sent the credit to your email!",

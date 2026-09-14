@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Este correo no está registrado para el evento Cafe Cursor. Solo los participantes aprobados pueden obtener créditos.",
+          error: "Este correo no está registrado para el Grok Bot Meetup. Solo los participantes aprobados pueden obtener créditos.",
           code: "NOT_ELIGIBLE",
         },
         { status: 403 }
