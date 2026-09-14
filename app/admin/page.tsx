@@ -92,7 +92,7 @@ export default function AdminLogin() {
           Panel de administración
         </h1>
         <p className="mb-8 text-center text-sm text-gray-400">
-          Cafe Cursor Buenos Aires #4
+          Grok Bot Meetup Buenos Aires
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">

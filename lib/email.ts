@@ -17,7 +17,7 @@ function getResendClient(): Resend | null {
 }
 
 // Email del remitente (debe ser verificado en Resend)
-const FROM_EMAIL = process.env.FROM_EMAIL || "Cafe Cursor <onboarding@resend.dev>";
+const FROM_EMAIL = process.env.FROM_EMAIL || "Grok Bot Meetup <onboarding@resend.dev>";
 
 interface SendCreditEmailParams {
   to: string;
@@ -62,8 +62,8 @@ export async function sendCreditEmail({
 
   try {
     const subject = locale === "es"
-      ? "🎉 ¡Tu crédito de Cursor ya está aquí! - Cafe Cursor Buenos Aires #4"
-      : "🎉 Your Cursor credit is here! - Cafe Cursor Buenos Aires #4";
+      ? "🎉 ¡Tu crédito de Grok ya está aquí! - Grok Bot Meetup Buenos Aires"
+      : "🎉 Your Grok credit is here! - Grok Bot Meetup Buenos Aires";
 
     const html = generateEmailHTML({
       name,
@@ -109,12 +109,12 @@ function generateEmailHTML({
   const texts = {
     greeting: isSpanish ? `¡Hola, ${name}!` : `Hello, ${name}!`,
     thanks: isSpanish
-      ? "¡Gracias por participar en Cafe Cursor Buenos Aires #4!"
-      : "Thank you for joining Cafe Cursor Buenos Aires #4!",
+      ? "¡Gracias por participar en el Grok Bot Meetup Buenos Aires!"
+      : "Thank you for joining the Grok Bot Meetup Buenos Aires!",
     intro: isSpanish
-      ? "Nos alegra mucho tenerte en nuestra comunidad. Este es tu crédito exclusivo de Cursor:"
-      : "We're thrilled to have you in our community. Here's your exclusive Cursor credit:",
-    yourCredit: isSpanish ? "Tu crédito de Cursor" : "Your Cursor Credit",
+      ? "Nos alegra mucho tenerte en la comunidad de SpaceXAI. Este es tu crédito exclusivo de Grok:"
+      : "We're glad to have you in the SpaceXAI community. Here's your exclusive Grok credit:",
+    yourCredit: isSpanish ? "Tu crédito de Grok" : "Your Grok Credit",
     useCredit: isSpanish ? "Usar mi crédito" : "Use My Credit",
     copyFallback: isSpanish
       ? "Si el botón no funciona, copia y pega este enlace:"
@@ -127,8 +127,8 @@ function generateEmailHTML({
       ? "Haz clic en el botón de arriba o copia el enlace"
       : "Click the button above or copy the link",
     step2: isSpanish
-      ? "Inicia sesión o crea tu cuenta de Cursor"
-      : "Sign in or create your Cursor account",
+      ? "Inicia sesión o crea tu cuenta de Grok"
+      : "Sign in or create your Grok account",
     step3: isSpanish
       ? "¡El crédito se aplicará automáticamente!"
       : "The credit will be applied automatically!",
@@ -136,8 +136,8 @@ function generateEmailHTML({
       ? "¿Tienes dudas? Comunícate con la organización del evento."
       : "Questions? Contact the event organizers.",
     footer: isSpanish
-      ? "Creado por Chris & Alex y adaptado para Buenos Aires por Luciano"
-      : "Made by Chris & Alex and adapted for Buenos Aires by Luciano",
+      ? "Organizado por Daniel Guzman, Luciano Neimark y Mariana Besseghini. SpaceXAI para Buenos Aires, Argentina."
+      : "Hosted by Daniel Guzman, Luciano Neimark, and Mariana Besseghini. SpaceXAI for Buenos Aires, Argentina.",
   };
 
   return `
@@ -146,7 +146,7 @@ function generateEmailHTML({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cafe Cursor - ${texts.yourCredit}</title>
+  <title>Grok Bot Meetup - ${texts.yourCredit}</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a;">
@@ -167,7 +167,7 @@ function generateEmailHTML({
           <tr>
             <td align="center" style="padding-bottom: 8px;">
               <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">
-                Cafe Cursor Buenos Aires #4
+                Grok Bot Meetup Buenos Aires
               </h1>
             </td>
           </tr>
@@ -176,7 +176,7 @@ function generateEmailHTML({
           <tr>
             <td align="center" style="padding-bottom: 32px;">
               <p style="margin: 0; font-size: 14px; color: #a3a3a3;">
-                Buenos Aires, Argentina
+                16 Sep 2026 · 18:00–20:00 · Buenos Aires
               </p>
             </td>
           </tr>
