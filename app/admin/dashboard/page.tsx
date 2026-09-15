@@ -59,6 +59,7 @@ export default function AdminDashboard() {
   const [actionLoading, setActionLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showImportCsvModal, setShowImportCsvModal] = useState(false);
   const [showAddCreditModal, setShowAddCreditModal] = useState(false);
   const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
 
@@ -339,6 +340,12 @@ export default function AdminDashboard() {
               + Usuario
             </button>
             <button
+              onClick={() => setShowImportCsvModal(true)}
+              className="rounded-lg bg-green-600/80 px-4 py-2 text-sm font-medium hover:bg-green-700"
+            >
+              Importar CSV
+            </button>
+            <button
               onClick={() => setShowAddCreditModal(true)}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-700"
             >
@@ -557,6 +564,39 @@ export default function AdminDashboard() {
         />
       )}
 
+      {showImportCsvModal && (
+        <ImportCsvModal
+          busy={actionLoading}
+          onClose={() => setShowImportCsvModal(false)}
+          onImported={fetchDashboard}
+          onSubmit={async (csv) => {
+            setActionLoading(true);
+            try {
+              const res = await fetch("/api/admin/actions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "IMPORT_USERS", data: { csv } }),
+              });
+              const json = await res.json();
+              if (res.status === 401) {
+                router.push("/admin");
+                throw new Error("No autorizado");
+              }
+              if (json.error) {
+                throw new Error(json.error);
+              }
+              return {
+                added: Number(json.added) || 0,
+                updated: Number(json.updated) || 0,
+                errors: Array.isArray(json.errors) ? json.errors : [],
+              };
+            } finally {
+              setActionLoading(false);
+            }
+          }}
+        />
+      )}
+
       {/* Modal Agregar Crédito */}
       {showAddCreditModal && (
         <AddCreditModal
@@ -611,6 +651,122 @@ function StatusBadge({ status }: { status: string }) {
     <span className={`rounded-full px-2 py-1 text-xs ${styles[status] || "bg-gray-500/20 text-gray-400"}`}>
       {labels[status] || status}
     </span>
+  );
+}
+
+function ImportCsvModal({
+  busy,
+  onClose,
+  onImported,
+  onSubmit,
+}: {
+  busy: boolean;
+  onClose: () => void;
+  onImported: () => Promise<void>;
+  onSubmit: (csv: string) => Promise<{
+    added: number;
+    updated: number;
+    errors: Array<{ row: number; email?: string; message: string }>;
+  }>;
+}) {
+  const [fileName, setFileName] = useState("");
+  const [csv, setCsv] = useState("");
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<{
+    added: number;
+    updated: number;
+    errors: Array<{ row: number; email?: string; message: string }>;
+  } | null>(null);
+
+  const handleFile = (file: File | undefined) => {
+    setResult(null);
+    setError("");
+    if (!file) {
+      setFileName("");
+      setCsv("");
+      return;
+    }
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCsv(typeof reader.result === "string" ? reader.result : "");
+    };
+    reader.onerror = () => {
+      setError("No se pudo leer el archivo");
+      setCsv("");
+    };
+    reader.readAsText(file);
+  };
+
+  const handleSubmit = async () => {
+    if (!csv.trim()) {
+      setError("Selecciona un archivo CSV");
+      return;
+    }
+    setError("");
+    try {
+      const importResult = await onSubmit(csv);
+      setResult(importResult);
+      await onImported();
+    } catch (importError) {
+      setError(importError instanceof Error ? importError.message : "Error al importar");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-xl border border-gray-800 bg-[#0a0a0a] p-6">
+        <h2 className="mb-4 text-lg font-bold">Importar usuarios CSV</h2>
+        <p className="mb-4 text-xs text-gray-400">
+          Columnas requeridas: email, name. Opcionales: company, role, approval_status o status (approved por defecto).
+          Actualiza por correo y no quita créditos reclamados.
+        </p>
+        <input
+          type="file"
+          accept=".csv,text/csv"
+          disabled={busy}
+          onChange={(e) => handleFile(e.target.files?.[0])}
+          className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white file:mr-3 file:rounded file:border-0 file:bg-white file:px-3 file:py-1 file:text-sm file:font-medium file:text-black"
+        />
+        {fileName && (
+          <p className="mt-2 text-xs text-gray-500">{fileName}</p>
+        )}
+        {error && (
+          <p className="mt-3 text-sm text-red-400">{error}</p>
+        )}
+        {result && (
+          <div className="mt-4 rounded-lg border border-gray-800 bg-gray-900/50 p-3 text-sm">
+            <p>Agregados: {result.added}</p>
+            <p>Actualizados: {result.updated}</p>
+            <p>Errores: {result.errors.length}</p>
+            {result.errors.length > 0 && (
+              <ul className="mt-2 max-h-32 space-y-1 overflow-y-auto text-xs text-amber-400">
+                {result.errors.slice(0, 20).map((item) => (
+                  <li key={`${item.row}-${item.email || "sin-correo"}`}>
+                    Fila {item.row}{item.email ? ` (${item.email})` : ""}: {item.message}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+        <div className="mt-6 flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 rounded-lg border border-gray-700 py-3 hover:bg-gray-800"
+          >
+            Cerrar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={busy || !csv.trim()}
+            className="flex-1 rounded-lg bg-white py-3 font-medium text-black hover:opacity-90 disabled:opacity-50"
+          >
+            {busy ? "Importando…" : "Importar"}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

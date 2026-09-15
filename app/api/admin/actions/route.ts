@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 import { sendCreditEmail } from "@/lib/email";
+import { importEligibleUsersFromCsv } from "@/lib/user-import";
 
 /**
  * POST /api/admin/actions - Ejecutar acciones administrativas
@@ -137,6 +138,44 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
           success: true,
           message: `Crédito revocado de ${user.email}`,
+        });
+      }
+
+      case "IMPORT_USERS": {
+        const csv = typeof data?.csv === "string" ? data.csv : "";
+        if (!csv.trim()) {
+          return NextResponse.json(
+            { error: "Sube un archivo CSV con usuarios" },
+            { status: 400 }
+          );
+        }
+
+        let result;
+        try {
+          result = await importEligibleUsersFromCsv(prisma, csv);
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "CSV inválido";
+          return NextResponse.json({ error: message }, { status: 400 });
+        }
+        const processed = result.added + result.updated;
+
+        if (processed === 0 && result.errors.length === 0) {
+          return NextResponse.json(
+            { error: "El CSV no contiene usuarios" },
+            { status: 400 }
+          );
+        }
+
+        console.log(
+          `📥 [ADMIN] CSV importado: ${result.added} agregados, ${result.updated} actualizados, ${result.errors.length} errores`
+        );
+
+        return NextResponse.json({
+          success: true,
+          message: `${result.added} agregados, ${result.updated} actualizados, ${result.errors.length} errores`,
+          added: result.added,
+          updated: result.updated,
+          errors: result.errors,
         });
       }
 

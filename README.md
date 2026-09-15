@@ -106,7 +106,7 @@ https://cursor.com/referral?code=DEF456
 
 ### Import Eligible Users (CSV)
 
-Create `prisma/users.csv` with pre-approved attendees:
+Create `prisma/users.csv` with pre-approved attendees, or upload the same file from `/admin` → Importar CSV:
 
 ```csv
 email,name,company,role,approval_status
